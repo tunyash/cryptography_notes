@@ -263,4 +263,97 @@ $(23,12)$-код Голея, исправляющий $3$ ошибки. $S_3(23)
 \begin{definition}
 Линейный код $C$ называется циклическим, если $\forall b \in C \colon b^{(1)} \in C$,
 где $(b_0, \ldots, b_{n-1})^{(1)} = (b_{n-1}, b_0, \ldots, b_{n-2})$
+
+Аналогично обозначим $b^{(j)} = (b^{(j-1)})^{(1)}$ --- сдвиг на $j$ позиций вправо.
 \end{definition}
+
+\begin{definition}
+Кодовым многочленом, соответствующим $b \in C$ назовем многочлен
+$\sum\limits_{i=0}^{n-1} b_i x^i$
+\end{definition}
+
+\begin{theorem}
+\label{mod_representation}
+$b^{(j)}(x) = x^{j} b(x) \mod (x^n + 1)$
+\end{theorem}
+
+\begin{proof}
+Распишем $x^j b(x)$:
+$$x^j b(x) = \sum\limits_{i=0}^{n-j-1} b_i x^{i+j} + \sum\limits_{i=n-j}^{n-1} b_i x^{i+j}
+   = \sum\limits_{i=0}^{n-j-1} b_i x^{i+j} + x^n 
+     \underbrace{\sum\limits_{i=n-j}^{n-1} b_i x^{i+j-n}}_{q(x)}$$
+Рассмотрим многочлен $q(x) = b_{n-j} + b_{n-j+1} x + \ldots + b_{n-1} x^{j-1}$ и
+прибавм его дважды к $x^j b(x)$ ($q(x) + q(x) = 0$):
+$$x^j b(x) = \underbrace{ b_{n-j} + b_{n-j+1} x + \ldots + b_{n-1} x^{j-1}}_{q(x)}
+           + b_0 x^j + \ldots + b_{n-j-1} x^{n-1} + x^n q(x) + q(x)$$
+Тогда по модулю $x^n + 1$ получаем $b^{(j)}(x)$
+\end{proof}
+
+\begin{theorem}
+\label{min_poly}
+В циклическом коде существует только один ненулевой многочлен минимальной
+степени.
+\end{theorem}
+
+\begin{proof}
+Пусть есть два таких многочлена $q_1(x) = x^m + \ldots$; $q_2(x) = x^m + \ldots$.
+Тогда из линейности кода $q_1(x) + q_2(x) \in C(x)$. Но 
+$$(q_1 + q_2)(x) = \underbrace{x^m + x^m}_{=0} + \underbrace{\ldots}_{deg < m}$$
+тогда $q_1$ и $q_2$ не минимальны по степени. противоречие.
+\end{proof}
+
+\begin{definition}
+Кодовый многочлен $g(x)$ минимальной степери среди многочленов $C(x)$ называется
+порождающим многочленом $C$.
+\end{definition}
+
+\begin{theorem}
+Свободный член $g(x)$ --- порождающего многочлена циклического кода, равен $1$.
+\end{theorem}
+
+\begin{proof}
+Пусть $g_0 = 0$, тогда $g_1 + g_2 x + \ldots + g_{n-1} x^{n-2} \in C(x)$, но его
+степень меньше, чем у $g$. Противоречие.
+\end{proof}
+
+\begin{theorem}
+Пусть $g(x)$ --- порождающий многочлен для циклического кода длины $n$.
+Тогда $b(x) \in C(x) \iff b(x) \text{ кратно } g(x)$.
+\end{theorem}
+
+\begin{proof}
+$\Leftarrow$ Пусть $b(x) = g(x) \cdot a(x)$. $deg(a) \le n-m-1$, тогда
+  $$b(x) = g(x) \sum\limits_{i=0}^{n-m-1} a_i x^i =  
+  \sum\limits_{i=0}^{n-m-1} a_i \underbrace{g(x) x^i}_{=g^{(i)}(x)}$$
+таким образом, $b(x)$ представлен в виде линейной комбинации циклических
+сдвигов $g(x)$, то есть $b(x) \in C(x)$
+
+$\Rightarrow$ Пусть $b(x) \in C(x)$. Можно записать $b(x) = g(x) \cdot q(x) + r(x)$.
+Нужно показать, что $r(x) = 0$
+$$r(x) = \underbrace{b(x)}_{\in C(x)} + \underbrace{g(x) q(x)}_{\in C(x)}$$
+Тогда $r(x) \in C(x)$. $deg(r(x)) < deg(g(x))$, тогда по теореме \ref{min_poly}
+$r(x) = 0$.
+\end{proof}
+
+
+\begin{theorem}
+Пусть код порождается многочленом $g(x)$. Тогда следующие условия равносильны
+\begin{enumerate}
+\item $C$ является циклическим
+\item $g(x)$ --- делитель $x^n + 1$
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+$1 \implies 2$ Рассмотрим $b \in C$. По теореме \ref{mod_representation} имеем
+$b(x) x^j = b^{(j)}(x) + (x^n + 1) q(x)$. Выберем $j$ так, чтобы $deg(b(x) x^j) = n$,
+тогда $q(x) = 1$. Тогда 
+$$\exists j \in \{0, \ldots, n-1\} \colon x^j b(x) = b^{(j)}(x) + (x^n + 1)$$
+Так как $C$ циклический и порождается $g(x)$, то $b^{(j)}(x) = g(x) a_j(x)$.
+Тогда 
+$$\underbrace{x^j b(x)}_{\text{кратно }g(x)} = 
+\underbrace{b^{(j)}(x)}_{\text{кратно } g(x)} + (x^n + 1)$$
+Тогда и $x^n + 1$ кратно $g(x)$.
+
+$2 \implies 1$ 
+\end{proof}
