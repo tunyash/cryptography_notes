@@ -197,4 +197,70 @@ $$\sum\limits_{i=0}^{n-1} g_i x^i \mapsto (x_0, \ldots, x_{n-1})
 если $deg(g(x)) = n-k$, то получается $(n,k)$ код.
 \end{definition}
 
+\begin{example}
+ $(6,4)$ код, с порождающим многочленом $1 + x + x^2$
+ 
+ \begin{tabular}{ccc}
+  $0 \, 0 \, 0 \, 1$ & $\overset{x^3}{\to}$ & $0 \, 0 \, 0 \, 1 \, 1 \, 1$ \\
+  $0 \, 0 \, 1 \, 0$ & $\overset{x^2}{\to}$ & $0 \, 0 \, 1 \, 1 \, 1 \, 0$ \\
+  $0 \, 1 \, 0 \, 0$ & $\overset{x}{\to}$ & $0 \, 1 \, 1 \, 1 \, 0 \, 0$ \\
+  $1 \, 0 \, 0 \, 0$ & $\overset{1}{\to}$ & $1 \, 1 \, 1 \, 0 \, 0 \, 0$ \\     
+ \end{tabular}
+\end{example}
 
+\section{Совершенные линейные коды}
+
+\begin{definition}
+Линейный $(n,k)$-код, исправляющий $r$ ошибок называется совершенным, если для него
+достигается граница Хэмминга:
+$$2^{n-k} = S_r(n)$$
+\end{definition}
+
+\begin{remark}
+Для нелинейных кодов граница Хэмминга имеет вид
+$$K = {2^n \over S_r(n)}$$
+\end{remark}
+
+\begin{example}
+$(2m+1,1)$ код. Кодовые слова $\begin{pmatrix} 0 & \ldots & 0 \\ 1 & \ldots & 1 \end{pmatrix}$.
+Этот код исправляет $m$ ошибок.
+$$S_m(2m+1) = \sum\limits_{i=0}^{m} C_{2m+1}^i = 
+{1 \over 2} \sum\limits_{i=0}^{m} (C_{2m+1}^i + C_{2m+1}^{2m+1-i}) = 2^{2m}$$
+Тогда $2^{2m+1 - 1} = 2^{2m} = S_m(2m+1)$, что и требуется по определению.
+\end{example}
+
+\begin{example}
+\label{perfect_hamming}
+Код Хэмминга с $n = 2^m - 1$, $k = 2^m - 1 - m$, $m \ge 2$. Код исправляет одну ошибку,
+$S_1(n) = 1 + n = 2^m$. Тогда
+$$2^{n-k} = 2^{2^m - 1 - (2^m - 1 - m)} = 2^m = S_1(n)$$
+\end{example}
+
+\begin{theorem}
+Cледующие условия равносильны
+\begin{enumerate} 
+\item Существует двоичный совершенный код $C$ в $\tw^{n}$, который исправляет
+одну ошибку
+\item $n = 2^m - 1$ 
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+$2 \implies 1$ 
+Должно выполняться $K = {2^n \over n+1}$. $K$ может быть целым, только если 
+$n+1 = 2^m$ для некоторого m.
+
+$1 \implies 2$ Доказали в примере \ref{perfect_hamming}.
+\end{proof}
+
+\begin{example}
+$(23,12)$-код Голея, исправляющий $3$ ошибки. $S_3(23) = 1 + 23 + C_{23}^2 + C_{23}^3 
+= 2048 = 2^{11}$. Тогда $2^{23} = S_3(23) \cdot 2^{12}$.
+\end{example}
+
+\section{Двоичные циклические коды}
+
+\begin{definition}
+Линейный код $C$ называется циклическим, если $\forall b \in C \colon b^{(1)} \in C$,
+где $(b_0, \ldots, b_{n-1})^{(1)} = (b_{n-1}, b_0, \ldots, b_{n-2})$
+\end{definition}
