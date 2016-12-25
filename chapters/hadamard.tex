@@ -1,0 +1,145 @@
+\lecture{Матрицы и коды Адамара}{А. Рязанов}{И. Агафонова}
+
+\section{Матрицы и коды Адамара, общее представление}
+
+\begin{definition}
+Матрицей Адамара называется матрица $H \in \{-1,1\}^{n \times n}$, такая,
+что $H \cdot H^{T} = n E_n$.
+
+Матрица адамана в нормализованном виде --- это матрица, у которой первая
+строка и первый столбец состоят из единиц.
+
+Двоичная матрица Адамара, это матрица, полученная из матрицы Адамара 
+заменой $-1$ на $1$ а $1$ на $0$.
+\end{definition}
+
+\begin{proposition}
+Умножение строчки или столбца матрицы Адамара на $-1$ переводит
+ее в матрицу Адамара.
+\end{proposition}
+
+\begin{proof}
+ Умножение строчки или столбца на единицу, это доножение слева или
+ справа на матрицу $d = diag(1,\ldots,1, -1, 1, \ldots, 1)$.
+ Тогда в первом случае 
+  $$(d H) \cdot (d H)^{T} = d H H^{T} d^T = d (n E) d^{T} = n E d d^{T} = n E$$
+ а во стором
+ $$(H d) \cdot (H d)^{T} = H d d^{T} H^{T} = H H^{T} = n E$$ 
+\end{proof}
+
+\begin{theorem}
+Если существует матрица Адамара порядка $n$, то $n \in \{1,2\} \cup \{4k\}$
+\end{theorem}
+
+\begin{proof}
+Пусть $n \ge 3$ и существует $H$. Тогда представим ее в нормализованном виде
+и разделим столбцы на четыре типа:
+\begin{enumerate}
+\item Начинается с $(1,1,1)$ --- $i$ штук
+\item Начинается с $(1,1,-1)$ --- $j$ штук
+\item Начинается с $(1,-1,1)$ --- $k$ штук
+\item Начинается с $(1,-1,-1)$ --- $l$ штук
+\end{enumerate}
+Запишем условия ортогональности строк $(1,2)$, $(2,3)$ и $(1,3)$:
+$$\left\{\begin{array}{l}
+           i+j -k-l = 0 \\
+           i-j + k -l = 0 \\
+           i-j-k+l = 0
+         \end{array}\right.$$
+Тогда $i=j=k=l$, тогда $n = 4i$         
+\end{proof}
+
+\begin{proposition}
+Если $H$ --- матрица Адамара, то
+$$\begin{pmatrix} H & H \\ H & -H \end{pmatrix}$$ --- тоже матрица Адамара.
+\end{proposition}
+\begin{proof}
+$$\begin{pmatrix} H & H \\ H & -H \end{pmatrix} \cdot
+   \begin{pmatrix} H^{T} & H^{T} \\ H^{T} & -H^{T} \end{pmatrix}
+   = \begin{pmatrix} H H^{T} + H H^{T} & H H^{T} - H H^{T} \\
+                      H H^{T} - H H^{T} & H H^{T} + H H^{T}\end{pmatrix} = 2n E_{2n}$$
+\end{proof}
+
+Такие матрицы Адамара называются матрицами Сильвестра.
+
+\begin{definition}
+Симплексным кодом Адамара называется $[K-1, K, {K \over 2}]$-код, состоящий
+из строк двоичной матрицы Адамара из которой удален первый столбец.
+\end{definition}
+
+\begin{proposition}
+Для симплексного кода Адамара выполнено $K = {2d \over 2d - n}$.
+\end{proposition}
+\begin{proof}
+Очевидно.
+\end{proof}
+
+\begin{remark}
+Если матрица Адамара, построена по способу Сильвестра, то симплексный код, 
+построенный по ней, линеен.
+\end{remark}
+
+\section{Построение матрицы Адамара по способу Пэли}
+
+\begin{definition}
+Пусть $p \in \mathbb{R} \setminus \{2\}$. $\{a \in \{0,\ldots, p-1\}
+  \colon \exists b \colon b^2 = a \}$ называется множеством
+  квадратичных вычетов.
+\end{definition}
+
+\begin{definition}
+Функция
+$$\chi(i) = \begin{cases} 0 & i \text{ кратно } p \\
+                          1 & i \mod p \text{ вычет} \\
+                          -1 & i \mod p \text{ невычет}
+            \end{cases}$$
+называется символом Лежандра.
+\end{definition}
+
+\begin{theorem}
+$\forall c \neq 0 \mod p$ выполнено $\sum\limits_{b=0}^{p-1} \chi(b) \chi(b+c) = -1$
+\end{theorem}
+
+\begin{construction}
+Матрица Джекобстола. $Q = \{q_{ij}\}_{p \times p}$. $q_{ij} = \chi(j-i)$.
+\end{construction}
+
+\begin{lemma}
+$Q \cdot Q^{T} = p E - \mathbf{1}_{p \times p}$ 
+
+$Q \mathbf{1}_{p \times p} = \mathbf{1}_{p \times p} Q = 0$
+\end{lemma}
+\begin{proof}
+$Q \mathbf{1}_{p \times p} = \mathbf{1}_{p \times p} Q = 0$, так как по модулю
+$p$ существует ${p-1 \over 2}$ вычетов и ${p-1 \over 2}$ невычетов.
+
+Рассмотрим $P = \{p_{ij}\} = Q \cdot Q^{T}$. Тогда 
+$$\begin{array}{rl} p_{ii} &= 
+    \sum\limits_{k=0}^{p-1} q_{ik}^2 = p\\
+    p_{ij} &= \sum\limits_{k=0}^{p-1} q_{ik} q_{jk} \end{array}$$
+$$p_{ij} = \sum\limits_{k=0}^{p-1} \chi(i-k) \chi(j-k) =
+   \sum\limits_{k=0}^{p-1} \chi(i-k) + \chi ((i-k) + (j-i)) = -1$$
+\end{proof}
+
+\begin{lemma}
+Пусть
+$$H = \begin{pmatrix} 1 & \mathbf{1}_p \\ \mathbf{1}_p & Q - E \end{pmatrix}$$
+Тогда $H$ --- матрица Адамара
+\end{lemma}
+
+\begin{proof}
+$$H \cdot H^{T} = 
+\begin{pmatrix} 1 & \mathbf{1}_p \\ \mathbf{1}_p & Q - E \end{pmatrix} \cdot
+\begin{pmatrix} 1 & \mathbf{1}_p \\ \mathbf{1}_p & Q^{T} - E \end{pmatrix} =
+\begin{pmatrix} p+1 & \mathbf{0}_p \\ \mathbf{0}_p & 
+\mathbf{1}_{p \times p} + (Q-E)(Q^{T}-E) \end{pmatrix} $$
+Распишем
+$$\mathbf{1}_{p\times p} + (Q- E) (Q^{T}-E) = 
+\mathbf{1}_{p\times p} + Q Q^{T} -Q - Q^{T} + E
+\mathbf{1}_{p\times p} + Q Q^{T} -Q - Q^{T} + E$$
+заметим, что $q_{ij} = \chi(i-j) = \chi(-1)\chi(j-i) = -\chi(j-i)$, тогда 
+$Q^{T} = -Q^{T}$, тогда 
+$$\mathbf{1}_{p\times p} + Q Q^{T} -Q - Q^{T} + E = 
+  \mathbf{1}_{p\times p} + Q Q^{T} + E = (p+1) E$$
+\end{proof}
+

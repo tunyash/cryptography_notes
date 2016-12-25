@@ -1,0 +1,38 @@
+\documentclass[twoside]{book}
+% 
+% Packages used:
+%
+\usepackage[english,russian]{babel}
+\usepackage[utf8]{inputenc}
+\selectlanguage{russian}
+
+\usepackage[cm]{fullpage}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+%\pagestyle{headings}
+
+\def\headsep{5mm}
+
+\usepackage{fancyhdr}
+ 
+\pagestyle{fancy}
+\fancyhf{}
+
+\renewcommand{\cleardoublepage}{\clearpage}
+
+\newcommand{\lecture}[4]{%
+	\fancyhead[RO]{{#3}: \coursetitle}
+	\fancyhead[LE]{Глава \thechapter. {#1}}
+	\chapter{{#1}\\{\small (Конспект: {#2})}}
+
+	\thispagestyle{plain}
+}
+\input{input/enviroments}
+\input{input/commands}
+
+\newcommand\coursetitle{Корректирующее кодирование и криптография}
+

@@ -1,0 +1,403 @@
+\lecture{Корректирующие коды, код Хемминга}{А. Рязанов}{И. Агафонова}
+
+\section{Общие определения}
+Кодируется последовательность бит. При {\bfseries непрерывном коде} кодируется
+вся последовательность, при {\bfseries блочном} последовательность разбивается на
+блоки по $k$ бит и каждый блок кодируется отдельно.
+
+\begin{definition}
+Инъективное отображение $f: K \to \tw^n, \, K \subset \tw^k$ называется кодом. Образ любого слова из $\tw^k$ 
+называется кодовым словом или кодом. Множество $C = f(\tw^k)$ также называется кодом.
+\end{definition}
+
+\begin{definition}
+Код называется раздельным, если $[n] = A \cup B$, $A \cap B = \emptyset$, $|A| = k$ и
+$\forall x \in K \colon f(x)|_A = x$, то есть, для некоторого подмножества бит
+кода оно совпадает с прообразом как строка. Биты множества $A$ называются
+информационными, а из множества $B$ --- проверочными.
+\end{definition}
+
+
+\begin{definition}
+Код называется линейным, если соответствующее отображение $f$ линейно.
+\end{definition}
+
+\begin{definition}
+Раздельный код называется систематическим, если проверочные символы являются линейной
+комбинацией информационных. То же самое, что раздельный линейный код.
+\end{definition}
+
+\begin{definition}
+Два кода $f$ и $g$ назовем эквивалентными, если $g(x) = f(\pi(x))$, где $\pi(x)$
+--- это $x$ под действием некоторой перестановки $\pi$.
+\end{definition}
+
+
+
+\begin{definition}
+Скорость кода $C \subset \tw^n$ --- это величина $R = {1 \over n} \log_2 |C|$.
+При $|C| = 2^k$ имеет место $R = {k \over n}$.
+
+Избыточность кода --- это величина $1-R$
+\end{definition}
+
+\section{Расстояние Хемминга и исправление ошибок}
+
+\begin{definition}
+Расстоянием Хемминга между строками $x,y \in \tw^n$ будем называть величину
+$$d(x,y) = |\{i \colon x_i \neq y_i\}|$$
+\end{definition}
+
+\begin{definition}
+$d(C) = \min\limits_{\substack{x,y \in C \\ x \neq y}} d(x,y)$ --- кодовое
+ расстояние кода $C$.
+\end{definition}
+
+Обозначение: $(n,k,d)$-код, код с длиной кодируемого слова $k$, кодового слова $n$
+и минимальным кодовым расстоянием $d$. $[n,K,d]$-код --- код с длиной кодового слова
+$n$, количеством слов $K$ и минимальным кодовым расстоянием $d$.
+
+\begin{definition}
+Код обнаруживает ошибки в $r$ битах, если существует отображение $g: \tw^n \to \tw$,
+такое, что $\forall x \in \tw^k, |z| \le r \colon g(f(x) \oplus z) = 1$
+\end{definition}
+
+\begin{definition}
+Код исправляет ошибки в $r$ битах, если существует отображение $g: \tw^n \to \tw^k$,
+такое, что $\forall x \in \tw^k, |z| \le r \colon g(f(x) \oplus z) = x$
+\end{definition}
+
+\begin{theorem}
+Для того, чтобы код $C$ позволял обнаружить ошибки в $r$ битах, необходимо
+и достаточно, чтобы $d(C) \ge r+1$
+\end{theorem}
+
+\begin{theorem}
+Для того, чтобы код $C$ позволял исправить ошибки в $r$ битах, необходимо
+и достаточно, чтобы $d(C) \ge 2r+1$
+\end{theorem}
+
+\begin{proof}
+$\Leftarrow$
+
+$g(x) = \argmin\limits_{y \in \tw^k} d(x, f(y))$. Пусть $x = f(y) + z$ и $|z| \le r$
+и $g(x) \neq y$. Тогда $d(f(g(x)), x) \le r$, а, значит $d(f(y),f(g(x))) \le 
+d(x, f(y)) + d(x, f(g(x))) \le 2r$. Противоречие.
+
+$\Rightarrow$
+
+Рассмотрим $x,y \in C$ такие, что $d(x,y) \le 2r$. Тогда легко видеть, что существует
+$z$, такое, что $d(x,z) \le r$ и $d(y,z) \le r$. Тогда, как бы мы не определили 
+$g(z)$, мы получим противоречие с $x$ или $y$.
+\end{proof}
+
+\section{Граница Хемминга}
+
+\begin{definition}
+Шаром радиуса $r$ c центром в $x$ назовем множество точек 
+$$B_{r} (x) = \{y \colon d(x,y) \le r\}$$
+Количество вершин в шаре в пространстве $\tw^n$ обозначим $S_r(n)$
+\end{definition}
+
+\begin{remark}
+$S_r(x) = \sum\limits_{i=0}^r C_n^i$.
+\end{remark}
+\begin{proof}
+$S_r(n) = |B_r(0)|$. Строки в $B_r(0)$ --- это строки с не более чем $r$ 
+единичными битами.
+\end{proof}
+
+\begin{definition}
+Энтропией дискретной случайной величины $\xi$ принимающей значения $1, \ldots n$
+c вероятностями $p_1, \ldots, p_n$ называется
+$$H(\xi) = -\sum\limits_{i=1}^n p_i \log_2 (p_i)$$
+\end{definition}
+
+\begin{lemma}
+$${1 \over n+1} 2^{n H({r \over n})} \le C_n^r \le 2^{n H({r \over n})}$$
+\end{lemma}
+\begin{proof}
+По формуле Стирлинга $$C_n^r \simeq {\sqrt{2\pi n} \over \sqrt{2\pi k} \sqrt{2\pi (n-k)}}
+\cdot {n^n \over k^k (n-k)^{n-k}}$$
+C другой стороны
+$$2^{nH({r \over n})} = 2^{n\Bigg(-{r \over n} \log_2 {r \over n} - (1-{r \over n}) 
+\log_2 (1- {r\over n})\Bigg)} = {\Bigg({r \over n}\Bigg)^{-r} \over 
+\Bigg(1-{r\over n}\Bigg)^{n-r}} = {n^n \over r^r (n-r)^{n-r}}$$
+Тогда для достаточно больших $n$ достаточно показать
+$${1 \over n+1} \le {\sqrt{2\pi n} \over \sqrt{2\pi k} \sqrt{2\pi (n-k)}} \le 1$$
+Второе неравенство очевидно, поскольку в знаменателе квадратичная зависимость.
+$$ {\sqrt{2\pi n} \over \sqrt{2\pi k} \sqrt{2\pi (n-k)}} = \sqrt{n \over k (n-k)} 
+{1 \over \sqrt{2 \pi}}$$
+$k (n-k) \le {n^2 \over 4}$, тогда имеем
+$$  {\sqrt{2\pi n} \over \sqrt{2\pi k} \sqrt{2\pi (n-k)}} \ge {2 \over \sqrt{2 \pi n}}$$
+для достаточно больших $n$ последнее $\ge {1 \over n+1}$
+\end{proof}
+
+\begin{theorem}
+Для достаточно больших $n$ и при условии $0 < r \le {n \over 2}$ верно
+$${\log_2 S_r(n) \over n} = H({r \over n}) + O({\log_2 n \over n})$$
+где $H({r\over n})$ --- энтропия случайной величины, принимающей значения
+$0$ и $1$ с вероятностями ${r\over n}$ и $1 - {r \over n}$.
+\end{theorem}
+
+\begin{proof}
+Покажем, что при $r \le {n \over 2}$ наибольшим слагаемым будет $C_n^r$.
+$${C_n^i \over C_n^{i+1}} = {n! (i+1)! (n-i-1)! \over n! i! (n-i)!} = {i+1 \over n-i}$$
+Возрастание $C_n^i$ равносильно ${C_n^i \over C_n^{i+1}} \le 1 \iff
+i+1 \le n-i \iff 2i \le n-1$. То есть $C_n^{i}$ больше предыдущего сочетания,
+если $2(i-1) \le n-1$ то есть $i \le {n+1 \over 2}$.
+Тогда имеем
+$$C_n^r \le S_r(n) \le (r+1) C_n^r$$ 
+Воспользуемся леммой, прологарифмируем формулу оттуда:
+$$-\log_2(n+1) + n H({r \over n}) \le \log_2 S_r(n) \le \log_2(r+1) + n H({r \over n})$$
+Поделим три части на $n$
+$$-{\log_2(n+1) \over n} +  H({r \over n}) \le {\log_2 S_r(n)\over n}
+ \le {\log_2(r+1) \over n} + H({r \over n})$$
+Тогда получили, что требовалось, 
+$${\log_2 S_r(n)\over n} = H({r \over n}) +
+\underbrace{c}_{|.| \le 1} {\log_2(r+1) \over n}$$
+\end{proof}
+
+\begin{theorem}{(Граница Хемминга)}
+Для любого $(n,k)$-кода, исправляющего $r$ ошибок верно
+$$n-k \ge \log_2\Big(\sum\limits_{i=0}^r C_n^i\Big)$$
+\end{theorem}
+
+\begin{proof}
+Рассмотрим прообразы исправляющей функции $g$. $g^{-1}(y)$. По определению
+$|g^{-1}(y)| \ge S_r(n)$ и $y_1 \neq y_2 \implies g^{-1}(y_1) \cap g^{-1}(y_2) = \emptyset$.
+Тогда для завершения доказательства достаточно расписать
+ $$2^n = |\tw^n| = \Big|\bigcup\limits_{y \in \tw^k} g^{-1}(y)\Big| \ge 
+   \sum\limits_{y \in \tw^k} S_r(k) = 2^k S_r(n)$$
+\end{proof}
+
+\begin{theorem}
+\label{hamming_exists}
+Если $n - k \ge \log_2 (n+1)$, то существует $(n,k,3)$ код, то есть,
+граница Хемминга достигается.
+\end{theorem}
+
+\begin{proof}
+Построим явно такой линейный код. $C = \{ Hx = 0 \}$, где $H$ --- матрица
+$(n-k) \times n$. Пусть $H_ij$ --- это $i$-й бит числа $j$ ($1 \le i \le n-k;\, 
+1 \le j \le n$). Заметим,
+что в условиях теоремы в матрице нет двух одинаковых столбцов, то есть,
+ее ранг не меньше $2$. Пусть существуют $x,y \in C$, такие, что $d(x,y) \le 2$
+тогда $d(0, x \oplus y) \le 2$. То есть $x \oplus y$ имеет не более
+двух единиц в двоичной записи $H (x \oplus y) = H_{j_1} \oplus H_{j_2} = 0$,
+что противоречит выводу о ранге. Тогда кодовое расстояние полученного
+кода равно $3$.
+\end{proof}
+
+\begin{example}
+Построим систематический $(n,k)$ код Хемминга. 
+
+Пусть $a \in \tw^k;\, b \in \tw^n$. Кодирующее преобразование $E(a) = b$.
+Наложим следующие ограничения:
+$$\left\{ \begin{array}{lr}
+             b_i = a_i & i \le k \\
+             b_{i+k} = (\Gamma_i, a) & i \le n-k
+          \end{array}\right. $$
+То есть $b = a (E_k | \Gamma^{T})$. То есть, мы построили порождающую матрицу
+кодирующей функции. Построим теперь проверочную матрицу:
+$$b_{i+k} = (\Gamma_i, (b_1, \ldots, b_k)) \iff 
+ b_{i+k} \oplus (\Gamma_i, (b_1, \ldots, b_k)) = 0$$
+То есть, $H = (\Gamma | E_{n-k})$. Условие $Hb = 0$ является необходимым и достаточным
+для того, чтобы $b$ являлось кодом, поскольку образом такого $b$ является 
+$(b_1, \ldots, b_k)$.
+
+Если стоблцы матрицы $H$ различны, то по \ref{hamming_exists} мы можем исправлять 
+одну ошибку. Давайте построим явно исправляющую функцию.
+
+Пусть $b' = b \oplus e_i$, где $e_i = (\underbrace{0, \ldots, 0}_{i-1}, 1, 0, \ldots, 0)$.
+Тогда $Hb' = H_i$ --- $i-й$ столбец матрицы $H$. Так как все столбцы различны,
+мы можем узнать, в каком бите была ошибка. $Hb'$ называется
+\emph{синдромом} вектора $b'$.
+\end{example}
+
+\section{Граница Варшамова-Гильберта}
+
+\begin{theorem}
+Существует $(n,k)$-код с минимальным расстоянием $d$, такой, что 
+$$n-k \le \log_2 S_{d-1} (n)$$
+\end{theorem}
+\begin{proof}
+Выберем точку $c_1$. Рассмотрим $B_{d-1}(c_1)$ и пометим точки в нем. Пока есть
+непомеченные точки будем выбирать $c_i$ и помечать точки в шаре $B_{d-1}(C_i)$.
+Так мы построим последовательность точек $c_1, \ldots, c_K$, такую, что 
+$i\neq j \implies d(c_i, d_j) \ge d$. Все точки $\tw^n$ покрыты хотя бы одним шаром, то
+есть $K \cdot S_{d-1}(n) \ge 2^n$. $K \ge 2$, если $d-1 < n$, так как 
+$d((0,\ldots,0),(1,\ldots,1)) = n$. Выберем $k = \lceil \log_2 K \rceil$,
+тогда $2^k S_{d-1}(n) \ge 2^n \implies S_{d-1}(n) \ge 2^{n-k}$.
+\end{proof}
+
+\begin{corollary}
+Существует $(n,k)$-код, исправляющий $r$ ошибок и удовлетворяющий
+$$n-k \le \log_2(S_{2r}(n))$$
+\end{corollary}
+
+\begin{remark}
+Мы получили верхнюю границу на количество исправляющих символов. Граница 
+Хемминга --- нижняя граница, то есть
+$$\log_2 S_r(n) \le n-k \le \log_2 S_{2r}(n)$$
+\end{remark}
+
+\section{Граница Плоткина}
+
+\begin{theorem}
+Для $[n,K,d]$-кода выполнено $d \le {n \cdot {K \over 2} \over K-1}$.
+В частности, для $(n,k,d)$-кода верно $d \le {n 2^{k-1} \over 2^k - 1}$
+\end{theorem}
+
+\begin{proof}
+Рассмотрим $D = \sum\limits_{x,y \in C} d(x,y)$. С одной стороны
+$$D \ge 2 С_{K}^2 d = K (K-1) d$$
+С другой стороны, нассмотрим каждый бит строк и обозначим
+$$d_i (x,y) = \begin{cases} 0 & x_i = y_i \\ 1 & x_i \neq y_i \end{cases}$$
+Тогда $d(x,y) = d_1(x,y) + \ldots + d_n(x,y)$. Тогда
+$$D = \sum\limits_{i=1}^n \underbrace{\sum\limits_{x,y \in C} d_i(x,y)}_{D_i}$$
+Заметим, что $$D_i = 2|\{x\in C \colon x_i = 0\}| \cdot |\{x \in C \colon x_i = 1\}|$$
+Тогда $D_i \le 2\Big({K \over 2}\Big)^2$, а, значит $$D \le {n K^2 \over 2}$$
+Таким образом, $${n K^2 \over 2} \ge K(K-1)d \iff {n K \over K-1} \ge d$$
+\end{proof}
+
+\begin{theorem}
+\label{theorem6}
+Если существует, $(n,k)$-код $C$, такой, что $d(C) \ge {n \over 2}$,
+то $$k \le \log_2 (2n) \iff {\overbrace{K}^{2^k} \over 2} \le n$$
+\end{theorem}
+
+\begin{proof}
+Рассмотрим преобразование 
+$$\underbrace{(b_1, \ldots, b_n)}_{\in \tw^n} \mapsto ((-1)^{b_1}, \ldots, (-1)^{b_n})$$
+Пусть $v^{(1)}, \ldots, v^{(K)}$ --- векторы, полученные этим преобразованием
+из векторов кода. $d(b^{(i)}, b^{(j)}) \ge {n \over 2} \iff (v^{(i)}, v^{(j)}) \le 0$.
+
+Пусть ${K \over 2} > n$, тогда покажем, что не может существовать набора 
+$v^{(1)}, \ldots, v^{(K)}$ с требуемым свойством. Рассмотрим $x \in \mathbb{R}^n$,
+такой, что $(x, v^{(i)}) \neq 0$ для всех $i$. Например, можно рассмотреть 
+$(1,0,\ldots,0)$.
+
+Тогда $(x,v^{(i)}) > 0$ для не менее чем ${K \over 2}$ векторов, либо
+$(x,v^{(i)}) < 0$ для не менее чем ${K \over 2}$ векторов. НУО верно 
+первое иначе рассмотрим $-x$.
+
+Тогда у нас есть набор из ${K \over 2} > n$ векторов, таких, что
+$(x, v^{(i)}) > 0$ для всех $i$. Количество векторов превышает $n$, 
+тогда $$\exists \lambda \colon \sum\limits_{i=1}^{n+1} \lambda_i v^{(i)} = 0$$
+
+НУО $\exists \lambda_i > 0$, иначе поменяем знак всем $\lambda$, тогда
+обозначим $I = \{i \colon \lambda_i > 0\} \neq \emptyset$. Можем записать
+$$\sum\limits_{i=1}^{n+1} \lambda_i v^{(i)} = 
+\underbrace{\sum\limits_{i \in I} \lambda_i v^{(i)}}_{z} +
+\sum\limits_{i \not\in I} \lambda_i v^{(i)} = 0$$
+
+\begin{itemize}
+\item $z \neq 0$. Тогда $(z,z) > 0$, с другой стороны
+      $$(z, 0 - z) = \Big(\sum\limits_{i \in I} \lambda_i v^{(i)}, 
+      -\sum\limits_{i \not\in I} \lambda_i v^{(i)}\Big) =
+        - \sum\limits_{\substack{i \in I \\ j \not\in I}} 
+     \underbrace{\lambda_i}_{>0} \underbrace{\lambda_j}_{<0} 
+       \overbrace{(v^{(i)}, v^{(j)})}^{<0} \le 0$$
+    Получаем противоречие
+\item $z=0$. Тогда $(z,x) = 0$, но
+   $$(z,x) = \Big(\sum\limits_{i \in I} \lambda_i v^{(i)}, x\Big) =
+   \sum\limits_{i \in I} \underbrace{\lambda_i}_{>0} \underbrace{(v^{(i)}, x)}_{>0} > 0$$
+\end{itemize}
+\end{proof}
+
+\begin{theorem}
+Для $(n,k)$ кода, такого, что $n \ge 2 d(C)$ выполнено
+  $$n -k \ge 2d(C) - \log_2 4d(C)$$
+\end{theorem}
+
+\begin{proof}
+При $n=2d$ воспользуемся \ref{theorem6} и получим $-k \ge -\log_2 (2n)$ и прибавим
+к обеим частям $n=2d$
+
+При $n > 2d$ обозначим $n = 2d + t$ и рассмотрим два случая:
+\begin{enumerate}
+\item $t \ge k$. Тогда сразу $n \ge 2d + k$ и теорема доказана
+\item $t < k$. Тогда выберем в коде $t$ информационных символов
+$I_0$ тогда рассмотрим код $C' = \{x|_{[n] \setminus I_0} \colon x \in C 
+\land x|_{I_0} = a\}$
+для произвольного $a \in \tw^t$. Кодовое расстояние
+этого кода не менее $d$, поскольку мы вычеркивали одинаковые символы, $n' = 2d$.
+Тогда $k-t \le \log_2 (2n')$. Тогда 
+  $$n - k = 2d - (k-t) \ge 2d - \log_2 (4d)$$
+\end{enumerate}
+\end{proof}
+
+\section{Асимптотика границ}
+
+$R = {k \over n}$ --- скорость кода.
+
+Обозначим $\delta(C) = {d(C) \over n}$ --- относительное кодовое расстояние.
+
+Обозначим $\mathcal{U} = \{(R, \delta)\} \subset [0,1] \times [0,1]$ множество пар,
+таких, что существует последовательность $(n_i, k_i, d_i)$ кодов, таких,
+что $$\begin{array}{l} 
+      n_i \underset{i \to \infty}{\to} \infty \\
+      {k_i \over n_i} \underset{i \to \infty}{\to} R \\
+      {d_i \over n_i} \underset{i \to \infty}{\to} \delta
+      \end{array}$$
+Оценим величину $\bar{R} (\delta) = \sup \{R \colon (R, \delta) \in \mathcal{U}\}$
+
+\begin{remark}
+При $\delta > {1 \over 2}\,\, \bar{R}(\delta) = 0$
+\end{remark}
+\begin{proof}
+$$d \le {n 2^{k-1} \over 2^k - 1} \implies \delta + {O(1) \over n} 
+    \le {2^{k-1} \over 2^k-1}$$
+При $n \to \infty$ получим (пользуясь $2\delta -1 > 0$)
+ $2^k \le {2 \delta \over 2 \delta - 1}$,
+тогда $k \le \log_2 {2 \delta \over 2 \delta -1}$, и значит
+$R = {k \over n} \to 0$
+\end{proof}
+
+\begin{proposition}
+$\bar{R}(\delta) \le 1 - H({\delta \over 2})$
+\end{proposition}
+
+\begin{proof}
+$n-k \ge \log_2 S_{\lfloor {d(C)-1 \over 2} \rfloor} (n)$ известно из теоремы
+о границе Хемминга. $d(C) = \lfloor \delta n \rfloor$ имеем
+$$1 - {k \over n} \ge
+ { \log_2 S_{\lfloor{ \lfloor n \delta \rfloor - 1 \over 2} \rfloor}(n) \over n}$$
+По следствию 
+$${\log_2 S_r(n) \over n} = H({r \over n}) + O({\log_2 n \over n})$$
+тогда 
+$$1 - R \ge O({\log_2 n \over n}) + 
+H({\lfloor {\lfloor n \delta \rfloor - 1 \over 2} \rfloor})$$
+пренебрегая округлениями
+$$R + O({\log_2 n \over n}) \le 1 - H({\delta \over 2})$$
+и при $n \to \infty$
+$$\bar{R}(\delta) \le 1 - H({\delta \over 2})$$
+\end{proof}
+
+
+\begin{proposition}
+$\bar{R}(\delta) \ge 1 - H(\delta)$ при $\delta \le {1 \over 2}$
+\end{proposition}
+
+\begin{proof}
+Из теоремы о границе Варшамова-Гильберта знаем, что
+$$n-k \le \log_2 S_{d-1} (n)$$
+в нашем случае 
+$$1 - {k \over n} \le {\log_2 S_{\lfloor n\delta \rfloor - 1} (n) \over n}$$
+по следствию из теоремы о границе Хемминга
+$$1 - {k \over n} \le H({\lfloor n \delta \rfloor - 1 \over n}) - O({\log_2 n \over n})$$
+тогда при $n \to \infty$ получаем требуемое.
+\end{proof}
+
+\begin{proposition}
+$\bar{R} (\delta) \le 1 - 2\delta$ при $\delta \le {1 \over 2}$
+\end{proposition}
+\begin{proof}
+Из последней теоремы о границе Плоткина
+$$n - k \ge 2 n \delta - \log_2 (4 n \delta)$$
+можно переписать как
+$${k \over n} \le 1 - 2 \delta + {\log_2 4 n \delta \over n}$$
+тогда при $n \to \infty$ имеем $\bar{R} \le 1 - 2 \delta$
+\end{proof}
+
