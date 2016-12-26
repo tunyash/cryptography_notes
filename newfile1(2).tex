@@ -1,0 +1,170 @@
+%% LyX 2.0.8.1 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[russian]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{luainputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=2cm,bmargin=2cm,lmargin=2cm}
+\usepackage{amsthm}
+\usepackage{graphicx}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+ \theoremstyle{definition}
+ \newtheorem*{defn*}{\protect\definitionname}
+  \theoremstyle{remark}
+  \newtheorem*{claim*}{\protect\claimname}
+  \theoremstyle{definition}
+  \newtheorem*{example*}{\protect\examplename}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\usepackage{tikz} 
+\usetikzlibrary{arrows,positioning} 
+\tikzset{
+    %Define standard arrow tip
+    >=stealth',
+    %Define style for boxes
+    punkt/.style={
+           rectangle,
+           rounded corners,
+           draw=black, very thick,
+           text width=20em,
+           minimum height=2em,
+           text centered},
+    % Define arrow style
+    pil/.style={
+           ->,
+           thick,
+           shorten <=2pt,
+           shorten >=2pt,}
+}
+
+\makeatother
+
+\usepackage{babel}
+  \providecommand{\claimname}{Утверждение}
+  \providecommand{\definitionname}{Определение}
+  \providecommand{\examplename}{Пример}
+
+\begin{document}
+
+\title{Модификации линейных кодов}
+\maketitle
+\begin{defn*}
+$\left(n+1,k\right)$-код, полученный из $\left(n,k\right)$-кода
+добавлением одного контрольного бита (иначе говоря, дополнительной
+переменной), называется \emph{расширенным кодом (extended code)}.
+\end{defn*}
+Вообще говоря, добовлять можем любой бит, но это не всегда имеет смысл.
+\begin{claim*}
+Любой $\left(n,k,d\right)$-код с нечётным кодовым расстоянием можно
+расширить до $\left(n+1,k,d+1\right)$-кода добавлением бита проверки
+чётности.\end{claim*}
+\begin{proof}
+Если между двумя словами было расстояние $d$, то одно из них имеет
+чётный вес, а другое нечётный, т.к. $d$ нечётно. Тогда очевидно,
+что добавление бита проверки чётности увеличит расстояние между ними.\end{proof}
+\begin{defn*}
+$\left(n-1,k\right)$-код, полученный из $\left(n,k\right)$-кода
+удалением одного из контрольных битов (удалением переменной), называется
+\emph{проколотым кодом (punctured code)}.
+\end{defn*}
+Если расширим код, а затем уменьшим его на тот же контрольный бит,
+на который увеличивали, получим исходный код.
+
+
+
+Если удаляемый бит принимает значение 1 в кодовом слове минимального
+веса, то минимальное кодовое расстояние уменьшается.
+
+
+\begin{defn*}
+Код, полученный удалением информационных битов, называется \emph{укороченным
+кодом (shortened code)}.
+\end{defn*}
+Это значит удаление строки из порождающей матрицы и удаление столбца
+из проверочной. Т.е. $\left(n,k\right)$-код превращается в $\left(n-1,k-1\right)$-код.
+\begin{defn*}
+Код, полученный добавлением информационного бита, называется \emph{удлинённым
+кодом (lengthened code)}.
+\end{defn*}
+Это значит, что мы добавили строку в порождающую матрицу и столбец
+в проверочную. Т.е. $\left(n,k\right)$-код превращается в $\left(n+1,k+1\right)$-код.
+\begin{defn*}
+Код, полученный удалением некоторых кодовых слов, называется \emph{суженным
+кодом (expurgated code)}.
+\end{defn*}
+Возможно построить суженный код так, чтобы он оставался линейным.
+
+
+
+Минимальное кодовое расстояние может увеличиться.
+\begin{defn*}
+Код, полученный добавлением новых кодовых слов, называется \emph{дополненным
+кодом (augmented code)}.
+
+\includegraphics[scale=0.6,bb = 0 0 200 100, draft, type=eps]{C:/Users/Лиза/Desktop/modham.JPG}
+
+
+
+\end{defn*}
+\begin{example*}
+$\left(7,4\right)$-код Хэмминга. 
+
+Построим расширенный код двум способами: начиная с проверочной матрицы
+и начиная с порождающей. Новая переменная --- дополнительная проверка
+чётности для всех битов.\end{example*}
+\begin{enumerate}
+\item Проверочная матрица $H=\left[\begin{array}{cccccccc}
+1 & 0 & 0 & 1 & 0 & 1 & 1 & |0\\
+0 & 1 & 0 & 1 & 1 & 1 & 0 & |0\\
+0 & 0 & 1 & 0 & 1 & 1 & 1 & |0\\
+\overline{1} & \overline{1} & \overline{1} & \overline{1} & \overline{1} & \overline{1} & \overline{1} & 1
+\end{array}\right]$. Последняя строка как раз суммирует проверяемый вектор по модулю
+2, т.е. проверяет чётность.\\
+Линейными преобразованиями получим $H=\left[\begin{array}{cccccccc}
+1 & 0 & 0 & 0 & 1 & 1 & 0 & 1\\
+0 & 1 & 0 & 0 & 0 & 1 & 1 & 1\\
+0 & 0 & 1 & 0 & 1 & 1 & 1 & 0\\
+0 & 0 & 0 & 1 & 1 & 0 & 1 & 1
+\end{array}\right]$. \\
+Ей соответствует порождающая матрица $G=\left[\begin{array}{cccccccc}
+1 & 0 & 1 & |1| & 1 & 0 & 0 & 0\\
+1 & 1 & 1 & |0| & 0 & 1 & 0 & 0\\
+0 & 1 & 1 & |1| & 0 & 0 & 1 & 0\\
+1 & 1 & 0 & |1| & 0 & 0 & 0 & 1
+\end{array}\right]$ , соответствующая начальной порождающей, к которой добавили 1 столбец
+(4-ый).
+\item Порождающая матрица $G=\left[\begin{array}{cccccccc}
+1 & 0 & 1 & |?| & 1 & 0 & 0 & 0\\
+1 & 1 & 1 & |?| & 0 & 1 & 0 & 0\\
+0 & 1 & 1 & |?| & 0 & 0 & 1 & 0\\
+1 & 1 & 0 & |?| & 0 & 0 & 0 & 1
+\end{array}\right]$. Добавим такой столбец, что сумма количество единиц в каждой строке
+чётно. Легко видеть, что это тот же столбец, который мы получили в
+первом случае и других быть не может.\\
+Почему появляется условие чётности по строкам? Вспомним,$G=\left(\Gamma^{t}|E\right),H=\left(E|\Gamma\right)$.
+От $H$ хотим, чтобы линейными преобразованиями над строками можно
+было получить строку из всех единиц. Поскольку в $H$ есть единичная
+подматрица, единственный способ это сделать --- просуммировать все
+строки с коэффициентами 1. Тогда нам необходимо, чтобы все столбцы
+$\Gamma$ были веса 1, то есть чтобы все строки $\Gamma^{t}$ были
+веса 1. Следовательно, все строки $G$ должны иметь вес 0. \end{enumerate}
+\begin{claim*}
+При удлинении и при укорочении минимальное кодовое расстояние не меняется.\end{claim*}
+\begin{proof}
+1
+\begin{enumerate}
+\item При удлинении очевидно.
+\item При укорочении происходит следующее: из $G$ вычёркивается строка
+и соответствующий её столбец \emph{единичной подматрицы}. Соответственно,
+вычёркивается столбец из проверочной матрицы.\\
+Любая линейная комбинация строк $G$ имеет вес как минимум $d$. 
+\[
+a_{1}g_{1}+\ldots+a_{n}g_{n}\geq d,\;\forall\left\{ a_{i}\right\} 
+\]
+Вычёркивание $i$-ой строки и соответствующего ей столбца --- это
+линейная комбинация с $a_{i}=0$.\end{enumerate}
+\end{proof}
+
+\end{document}

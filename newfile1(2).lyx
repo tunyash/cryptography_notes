@@ -1,0 +1,1085 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+\usepackage{tikz} 
+\usetikzlibrary{arrows,positioning} 
+\tikzset{
+    %Define standard arrow tip
+    >=stealth',
+    %Define style for boxes
+    punkt/.style={
+           rectangle,
+           rounded corners,
+           draw=black, very thick,
+           text width=20em,
+           minimum height=2em,
+           text centered},
+    % Define arrow style
+    pil/.style={
+           ->,
+           thick,
+           shorten <=2pt,
+           shorten >=2pt,}
+}
+\end_preamble
+\use_default_options true
+\begin_modules
+theorems-starred
+\end_modules
+\maintain_unincluded_children false
+\language russian
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2cm
+\topmargin 2cm
+\bottommargin 2cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language french
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Модификации линейных кодов
+\end_layout
+
+\begin_layout Definition
+\begin_inset Formula $\left(n+1,k\right)$
+\end_inset
+
+-код, полученный из 
+\begin_inset Formula $\left(n,k\right)$
+\end_inset
+
+-кода добавлением одного контрольного бита (иначе говоря, дополнительной
+ переменной), называется 
+\emph on
+расширенным кодом (extended code)
+\emph default
+.
+\end_layout
+
+\begin_layout Standard
+Вообще говоря, добовлять можем любой бит, но это не всегда имеет смысл.
+\end_layout
+
+\begin_layout Claim*
+Любой 
+\begin_inset Formula $\left(n,k,d\right)$
+\end_inset
+
+-код с нечётным кодовым расстоянием можно расширить до 
+\begin_inset Formula $\left(n+1,k,d+1\right)$
+\end_inset
+
+-кода добавлением бита проверки чётности.
+\end_layout
+
+\begin_layout Proof
+Если между двумя словами было расстояние 
+\begin_inset Formula $d$
+\end_inset
+
+, то одно из них имеет чётный вес, а другое нечётный, т.к.
+ 
+\begin_inset Formula $d$
+\end_inset
+
+ нечётно.
+ Тогда очевидно, что добавление бита проверки чётности увеличит расстояние
+ между ними.
+\end_layout
+
+\begin_layout Definition
+\begin_inset Formula $\left(n-1,k\right)$
+\end_inset
+
+-код, полученный из 
+\begin_inset Formula $\left(n,k\right)$
+\end_inset
+
+-кода удалением одного из контрольных битов (удалением переменной), называется
+ 
+\emph on
+проколотым кодом (punctured code)
+\emph default
+.
+\end_layout
+
+\begin_layout Standard
+Если расширим код, а затем уменьшим его на тот же контрольный бит, на который
+ увеличивали, получим исходный код.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Standard
+Если удаляемый бит принимает значение 1 в кодовом слове минимального веса,
+ то минимальное кодовое расстояние уменьшается.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Definition
+Код, полученный удалением информационных битов, называется 
+\emph on
+укороченным кодом (shortened code)
+\emph default
+.
+\end_layout
+
+\begin_layout Standard
+Это значит удаление строки из порождающей матрицы и удаление столбца из
+ проверочной.
+ Т.е.
+ 
+\begin_inset Formula $\left(n,k\right)$
+\end_inset
+
+-код превращается в 
+\begin_inset Formula $\left(n-1,k-1\right)$
+\end_inset
+
+-код.
+\end_layout
+
+\begin_layout Definition
+Код, полученный добавлением информационного бита, называется 
+\emph on
+удлинённым кодом (lengthened code)
+\emph default
+.
+\end_layout
+
+\begin_layout Standard
+Это значит, что мы добавили строку в порождающую матрицу и столбец в проверочную.
+ Т.е.
+ 
+\begin_inset Formula $\left(n,k\right)$
+\end_inset
+
+-код превращается в 
+\begin_inset Formula $\left(n+1,k+1\right)$
+\end_inset
+
+-код.
+\end_layout
+
+\begin_layout Definition
+Код, полученный удалением некоторых кодовых слов, называется 
+\emph on
+суженным кодом (expurgated code)
+\emph default
+.
+\end_layout
+
+\begin_layout Standard
+Возможно построить суженный код так, чтобы он оставался линейным.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Standard
+Минимальное кодовое расстояние может увеличиться.
+\end_layout
+
+\begin_layout Definition
+Код, полученный добавлением новых кодовых слов, называется 
+\emph on
+дополненным кодом (augmented code)
+\emph default
+.
+\end_layout
+
+\begin_layout Definition
+\begin_inset Graphics
+	filename C:/Users/Лиза/Desktop/modham.JPG
+	scale 60
+	rotateOrigin center
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Definition
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+tikzstyle{block} = [rectangle, draw, text width=20em, text centered, rounded
+ corners, minimum height=4em]
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{tikzpicture}[node distance=1cm, auto,]
+\end_layout
+
+\begin_layout Plain Layout
+
+% 
+\backslash
+node[punkt](market) {Market (b)};
+\end_layout
+
+\begin_layout Plain Layout
+
+% 
+\backslash
+node[punkt, inner sep=5pt,below=0.5cm of market]  (formidler) {Intermediaries
+ (c)};
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ 
+\backslash
+node [punkt] (743) {(7,4,3)-код Хэмминга
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+$G=
+\backslash
+left[
+\backslash
+begin{array}{ccccccc}1 & 1 & 0 & 1 & 0 & 0 & 0
+\backslash
+
+\backslash
+1 & 1 & 1 & 0 & 1 & 0 & 0
+\backslash
+
+\backslash
+0 & 1 & 1 & 0 & 0 & 1 & 0
+\backslash
+
+\backslash
+1 & 0 & 0 & 0 & 0 & 0 & 1
+\backslash
+end{array}
+\backslash
+right]$
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+$H=
+\backslash
+left[
+\backslash
+begin{array}{ccccccc}1 & 0 & 0 & 1 & 0 & 1 & 1
+\backslash
+
+\backslash
+0 & 1 & 0 & 1 & 1 & 1 & 0
+\backslash
+
+\backslash
+0 & 0 & 1 & 0 & 1 & 1 & 1
+\backslash
+end{array}
+\backslash
+right]$};
+\end_layout
+
+\begin_layout Plain Layout
+
+ 
+\backslash
+node[above=of 743] (dummy) {};
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+node [punkt, left of=743, below of=743, node distance=5cm] (734) {(7,3,4)-код
+ Хэмминга
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+$G=
+\backslash
+left[
+\backslash
+begin{array}{ccccccc}1 & 0 & 1 & 1 & 1 & 0 & 0
+\backslash
+
+\backslash
+1 & 1 & 1 & 0 & 0 & 1 & 0
+\backslash
+
+\backslash
+0 & 1 & 1 & 1 & 0 & 0 & 1
+\backslash
+end{array}
+\backslash
+right]$
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+$H=
+\backslash
+left[
+\backslash
+begin{array}{ccccccc}1 & 0 & 0 & 0 & 1 & 1 & 0
+\backslash
+
+\backslash
+0 & 1 & 0 & 0 & 0 & 1 & 1
+\backslash
+
+\backslash
+0 & 0 & 1 & 0 & 1 & 1 & 1
+\backslash
+
+\backslash
+0 & 0 & 0 & 1 & 1 & 0 & 1
+\backslash
+end{array}
+\backslash
+right]$};
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+node [punkt, right of=743, below of=743, node distance=5cm] (844) {(8,4,4)-код
+ Хэмминга
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+$G=
+\backslash
+left[
+\backslash
+begin{array}{cccccccc}1 & 0 & 1 & 1 & 1 & 0 & 0 & 0
+\backslash
+
+\backslash
+1 & 1 & 1 & 0 & 0 & 1 & 0 & 0
+\backslash
+
+\backslash
+0 & 1 & 1 & 1 & 0 & 0 & 1 & 0
+\backslash
+
+\backslash
+1 & 1 & 0 & 1 & 0 & 0 & 0 & 1
+\backslash
+end{array}
+\backslash
+right]$
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+$H=
+\backslash
+left[
+\backslash
+begin{array}{cccccccc}1 & 0 & 0 & 0 & 1 & 1 & 0 & 1
+\backslash
+
+\backslash
+0 & 1 & 0 & 0 & 0 & 1 & 1 & 1
+\backslash
+
+\backslash
+0 & 0 & 1 & 0 & 1 & 1 & 1 & 0
+\backslash
+
+\backslash
+0 & 0 & 0 & 1 & 1 & 0 & 1 & 1
+\backslash
+end{array}
+\backslash
+right]$};
+\end_layout
+
+\begin_layout Plain Layout
+
+% 
+\backslash
+node[right=of dummy] (t) {Ultimate borrower}
+\end_layout
+
+\begin_layout Plain Layout
+
+   edge[pil,bend left=45] (743.east)
+\end_layout
+
+\begin_layout Plain Layout
+
+   edge[pil, bend left=45] (743.east);
+\end_layout
+
+\begin_layout Plain Layout
+
+% 
+\backslash
+node[left=of dummy] (g) {Ultimate lender}
+\end_layout
+
+\begin_layout Plain Layout
+
+   edge[pil, bend right=45] (734.west)
+\end_layout
+
+\begin_layout Plain Layout
+
+   edge[pil, bend right=45] (734.west)
+\end_layout
+
+\begin_layout Plain Layout
+
+   edge[pil,<->, bend left=45] node[auto] {Direct (a)} (t);
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{tikzpicture}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+vspace{1em}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Definition
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+tikzstyle{block} = [rectangle, draw, text width=20em, text centered, rounded
+ corners, minimum height=4em]
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+tikzstyle{line} = [draw, -latex']
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{tikzpicture}[node distance = 2cm, auto]
+\end_layout
+
+\begin_layout Plain Layout
+
+    % Place nodes
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+node [block] (743) {(7,4,3)-код Хэмминга
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+$G=
+\backslash
+left[
+\backslash
+begin{array}{ccccccc}1 & 1 & 0 & 1 & 0 & 0 & 0
+\backslash
+
+\backslash
+1 & 1 & 1 & 0 & 1 & 0 & 0
+\backslash
+
+\backslash
+0 & 1 & 1 & 0 & 0 & 1 & 0
+\backslash
+
+\backslash
+1 & 0 & 0 & 0 & 0 & 0 & 1
+\backslash
+end{array}
+\backslash
+right]$
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+$H=
+\backslash
+left[
+\backslash
+begin{array}{ccccccc}1 & 0 & 0 & 1 & 0 & 1 & 1
+\backslash
+
+\backslash
+0 & 1 & 0 & 1 & 1 & 1 & 0
+\backslash
+
+\backslash
+0 & 0 & 1 & 0 & 1 & 1 & 1
+\backslash
+end{array}
+\backslash
+right]$};
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+node [block, left of=743, below of=743, node distance=5cm] (734) {(7,3,4)-код
+ Хэмминга
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+$G=
+\backslash
+left[
+\backslash
+begin{array}{ccccccc}1 & 0 & 1 & 1 & 1 & 0 & 0
+\backslash
+
+\backslash
+1 & 1 & 1 & 0 & 0 & 1 & 0
+\backslash
+
+\backslash
+0 & 1 & 1 & 1 & 0 & 0 & 1
+\backslash
+end{array}
+\backslash
+right]$
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+$H=
+\backslash
+left[
+\backslash
+begin{array}{ccccccc}1 & 0 & 0 & 0 & 1 & 1 & 0
+\backslash
+
+\backslash
+0 & 1 & 0 & 0 & 0 & 1 & 1
+\backslash
+
+\backslash
+0 & 0 & 1 & 0 & 1 & 1 & 1
+\backslash
+
+\backslash
+0 & 0 & 0 & 1 & 1 & 0 & 1
+\backslash
+end{array}
+\backslash
+right]$};
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+node [block, right of=743, below of=743, node distance=5cm] (844) {(8,4,4)-код
+ Хэмминга
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+$G=
+\backslash
+left[
+\backslash
+begin{array}{cccccccc}1 & 0 & 1 & 1 & 1 & 0 & 0 & 0
+\backslash
+
+\backslash
+1 & 1 & 1 & 0 & 0 & 1 & 0 & 0
+\backslash
+
+\backslash
+0 & 1 & 1 & 1 & 0 & 0 & 1 & 0
+\backslash
+
+\backslash
+1 & 1 & 0 & 1 & 0 & 0 & 0 & 1
+\backslash
+end{array}
+\backslash
+right]$
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+$H=
+\backslash
+left[
+\backslash
+begin{array}{cccccccc}1 & 0 & 0 & 0 & 1 & 1 & 0 & 1
+\backslash
+
+\backslash
+0 & 1 & 0 & 0 & 0 & 1 & 1 & 1
+\backslash
+
+\backslash
+0 & 0 & 1 & 0 & 1 & 1 & 1 & 0
+\backslash
+
+\backslash
+0 & 0 & 0 & 1 & 1 & 0 & 1 & 1
+\backslash
+end{array}
+\backslash
+right]$};
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+draw[->,blue] (743) ..
+ controls +(left:5cm) and +(up:5cm) ..
+ node[above,sloped] {label} (734);
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+draw[->,orange] (743) ..
+ controls +(left:4cm) and +(up:2cm) ..
+ node[above,sloped] {label} (734);
+\end_layout
+
+\begin_layout Plain Layout
+
+%    
+\backslash
+path [line] (743) |- node [near start] {yes} (844);
+\end_layout
+
+\begin_layout Plain Layout
+
+%	
+\backslash
+path [line] (844) |- (743);
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+node [line] (743) |- (734);
+\end_layout
+
+\begin_layout Plain Layout
+
+%	
+\backslash
+path [line] (734) |- (743);
+\end_layout
+
+\begin_layout Plain Layout
+
+%    
+\backslash
+path [line] (identify) -- (evaluate);
+\end_layout
+
+\begin_layout Plain Layout
+
+%    
+\backslash
+path [line] (evaluate) -- (decide);
+\end_layout
+
+\begin_layout Plain Layout
+
+%    
+\backslash
+path [line] (decide) -| node [near start] {yes} (update);
+\end_layout
+
+\begin_layout Plain Layout
+
+%    
+\backslash
+path [line] (update) |- (identify);
+\end_layout
+
+\begin_layout Plain Layout
+
+%    
+\backslash
+path [line] (decide) -- node {no}(stop);
+\end_layout
+
+\begin_layout Plain Layout
+
+%    
+\backslash
+path [line,dashed] (expert) -- (init);
+\end_layout
+
+\begin_layout Plain Layout
+
+%    
+\backslash
+path [line,dashed] (system) -- (init);
+\end_layout
+
+\begin_layout Plain Layout
+
+%    
+\backslash
+path [line,dashed] (system) |- (evaluate);
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{tikzpicture}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Example
+\begin_inset Formula $\left(7,4\right)$
+\end_inset
+
+-код Хэмминга.
+ 
+\end_layout
+
+\begin_layout Example
+Построим расширенный код двум способами: начиная с проверочной матрицы и
+ начиная с порождающей.
+ Новая переменная --- дополнительная проверка чётности для всех битов.
+\end_layout
+
+\begin_layout Enumerate
+Проверочная матрица 
+\begin_inset Formula $H=\left[\begin{array}{cccccccc}
+1 & 0 & 0 & 1 & 0 & 1 & 1 & |0\\
+0 & 1 & 0 & 1 & 1 & 1 & 0 & |0\\
+0 & 0 & 1 & 0 & 1 & 1 & 1 & |0\\
+\overline{1} & \overline{1} & \overline{1} & \overline{1} & \overline{1} & \overline{1} & \overline{1} & 1
+\end{array}\right]$
+\end_inset
+
+.
+ Последняя строка как раз суммирует проверяемый вектор по модулю 2, т.е.
+ проверяет чётность.
+\begin_inset Newline newline
+\end_inset
+
+Линейными преобразованиями получим 
+\begin_inset Formula $H=\left[\begin{array}{cccccccc}
+1 & 0 & 0 & 0 & 1 & 1 & 0 & 1\\
+0 & 1 & 0 & 0 & 0 & 1 & 1 & 1\\
+0 & 0 & 1 & 0 & 1 & 1 & 1 & 0\\
+0 & 0 & 0 & 1 & 1 & 0 & 1 & 1
+\end{array}\right]$
+\end_inset
+
+.
+ 
+\begin_inset Newline newline
+\end_inset
+
+Ей соответствует порождающая матрица 
+\begin_inset Formula $G=\left[\begin{array}{cccccccc}
+1 & 0 & 1 & |1| & 1 & 0 & 0 & 0\\
+1 & 1 & 1 & |0| & 0 & 1 & 0 & 0\\
+0 & 1 & 1 & |1| & 0 & 0 & 1 & 0\\
+1 & 1 & 0 & |1| & 0 & 0 & 0 & 1
+\end{array}\right]$
+\end_inset
+
+ , соответствующая начальной порождающей, к которой добавили 1 столбец (4-ый).
+\end_layout
+
+\begin_layout Enumerate
+Порождающая матрица 
+\begin_inset Formula $G=\left[\begin{array}{cccccccc}
+1 & 0 & 1 & |?| & 1 & 0 & 0 & 0\\
+1 & 1 & 1 & |?| & 0 & 1 & 0 & 0\\
+0 & 1 & 1 & |?| & 0 & 0 & 1 & 0\\
+1 & 1 & 0 & |?| & 0 & 0 & 0 & 1
+\end{array}\right]$
+\end_inset
+
+.
+ Добавим такой столбец, что сумма количество единиц в каждой строке чётно.
+ Легко видеть, что это тот же столбец, который мы получили в первом случае
+ и других быть не может.
+\begin_inset Newline newline
+\end_inset
+
+Почему появляется условие чётности по строкам? Вспомним,
+\begin_inset Formula $G=\left(\Gamma^{t}|E\right),H=\left(E|\Gamma\right)$
+\end_inset
+
+.
+ От 
+\begin_inset Formula $H$
+\end_inset
+
+ хотим, чтобы линейными преобразованиями над строками можно было получить
+ строку из всех единиц.
+ Поскольку в 
+\begin_inset Formula $H$
+\end_inset
+
+ есть единичная подматрица, единственный способ это сделать --- просуммировать
+ все строки с коэффициентами 1.
+ Тогда нам необходимо, чтобы все столбцы 
+\begin_inset Formula $\Gamma$
+\end_inset
+
+ были веса 1, то есть чтобы все строки 
+\begin_inset Formula $\Gamma^{t}$
+\end_inset
+
+ были веса 1.
+ Следовательно, все строки 
+\begin_inset Formula $G$
+\end_inset
+
+ должны иметь вес 0.
+ 
+\end_layout
+
+\begin_layout Claim
+При удлинении и при укорочении минимальное кодовое расстояние не меняется.
+\end_layout
+
+\begin_layout Proof
+1
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+При удлинении очевидно.
+\end_layout
+
+\begin_layout Enumerate
+При укорочении происходит следующее: из 
+\begin_inset Formula $G$
+\end_inset
+
+ вычёркивается строка и соответствующий её столбец 
+\emph on
+единичной подматрицы
+\emph default
+.
+ Соответственно, вычёркивается столбец из проверочной матрицы.
+\begin_inset Newline newline
+\end_inset
+
+Любая линейная комбинация строк 
+\begin_inset Formula $G$
+\end_inset
+
+ имеет вес как минимум 
+\begin_inset Formula $d$
+\end_inset
+
+.
+ 
+\begin_inset Formula 
+\[
+a_{1}g_{1}+\ldots+a_{n}g_{n}\geq d,\;\forall\left\{ a_{i}\right\} 
+\]
+
+\end_inset
+
+Вычёркивание 
+\begin_inset Formula $i$
+\end_inset
+
+-ой строки и соответствующего ей столбца --- это линейная комбинация с 
+\begin_inset Formula $a_{i}=0$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\end_body
+\end_document
