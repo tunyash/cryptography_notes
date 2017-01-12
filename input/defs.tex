@@ -7,7 +7,7 @@
 \selectlanguage{russian}
 
 \usepackage[cm]{fullpage}
-
+\usepackage{imakeidx}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsfonts}
@@ -16,6 +16,15 @@
 %\pagestyle{headings}
 
 \def\headsep{5mm}
+\usepackage[linktoc=all]{hyperref}
+\usepackage{titlesec}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
 
 \usepackage{fancyhdr}
  
@@ -27,7 +36,7 @@
 \newcommand{\lecture}[4]{%
 	\fancyhead[RO]{{#3}: \coursetitle}
 	\fancyhead[LE]{Глава \thechapter. {#1}}
-	\chapter{{#1}\\{\small (Конспект: {#2})}}
+	\chapter{{#1}}
 
 	\thispagestyle{plain}
 }

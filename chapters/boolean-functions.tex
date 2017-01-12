@@ -1,0 +1,641 @@
+\lecture{Булевы функции}{}{И. Агафонова}
+
+\section{Определения. Алгебраическая нормальная форма}
+\subsection{Алгебраическая нормальная форма}
+\begin{definition}
+Функция $f: \{0,1\}^m \to \{0,1\}$ называется булевой функцией
+\end{definition}
+
+Мы поймем, что \emph{любую} булеву функцию можно представить в виде 
+многочлена от $m$ переменных в $\mathbb{F}_2$ и даже выведем явную формулу. 
+
+С помощью таблицы истинности можно легко заметить, что для любой булевой
+функции $f$ верно
+
+$$f(v_1, \ldots, v_m) = \bigvee\limits_{i_1, \ldots, i_m \in \{0,1\}}
+       f(i_1, \ldots, i_m) (w_1^{i_1} \land \ldots \land w_m^{i_m})$$
+
+Где $w_i^1 = v_i$ и $w_i^0 = \lnot v_i$.
+
+Это просто функция в дизъюнктивной нормальной форме.
+
+\begin{definition}
+Будем обозначать $x \le y$ для $x,y \in \{0,1\}^n$, если $x_i \le y_i$ для 
+всех $i \in \{1,\ldots,n\}$
+\end{definition}
+
+\begin{theorem}
+\label{mebius}
+Любая булева функция $f$ может быть записана как
+$$f(v_1, \ldots, v_m) = \sum\limits_{a \in \{0,1\}^m} g(a) v_1^{a_1}
+ \ldots, v_m^{a_m}$$ где $g(a) = \sum\limits_{b \le a} f(b_1, \ldots, b_m)$
+
+{\bfseries Здесь и далее, если не указано иное, все суммы в $\mathbb{F}_2$}
+\end{theorem}
+
+\begin{proof}
+Зафиксируем набор значений $v_1, \ldots, v_m$ и проверим, что получается то,
+ что нужно. Пусть $A = \{i \colon v_i = 1\} = \{\alpha_1, \ldots, \alpha_k\};
+ \, B = \{i \colon v_i = 0\}$.
+
+Во-первых, можно выбросить слагаемые, где $a_i = 1$ для $i \in B$, так 
+как они обращаются в ноль.
+
+$$\sum\limits_{a \le \mathbf{1}_A} g(a) v_1^{a_1} \ldots, v_m^{a_m} = 
+\sum\limits_{a \le \mathbf{1}_A} g(a)$$
+
+{\scriptsize Здесь $\mathbf{1}_A$ --- характеристический вектор $A$, он
+ равен $(v_1, \ldots, v_m)$.}
+
+Так как во всех остальных слагаемых $v_1^{a_1} \ldots, v_m^{a_m} = 1$.
+ Тогда, подставляя $g(a)$, получаем
+$$=  \sum\limits_{a \le \mathbf{1}_A} \sum\limits_{b \le a} f(b_1, \ldots, b_m)$$
+Давайте поймем, сколько раз каждое слагаемое входит в сумму:
+$$ = \sum\limits_{b \le \mathbf{1}_A} \sum\limits_{\mathbf{1}_A \ge a \ge b}
+ f(b_1, \ldots, b_m)$$
+Осталость посчитать сколько бывает таких $a$. Легко видеть, что их
+ количество равно $2^{w(a) - w(b)}$ и тогда все слагаемые, кроме 
+ $b = \mathbf{1}_A = (v_1, \ldots v_m)$ по четности обращаются в ноль
+$$ = f(v_1, v_2, \ldots, v_m)$$
+\end{proof}
+
+
+
+\begin{definition}
+Представление
+$$f(v_1, \ldots, v_m) = \sum\limits_{a \in \{0,1\}^m} g(a) v_1^{a_1}
+ \ldots, v_m^{a_m}$$
+ называется \emph{алгебраической нормальной формой} функции $f$.
+\end{definition}
+
+\subsection{Быстрое преобразование Мёбиуса}
+\begin{definition}
+Пусть $f \in \tw^{2^n}$. Поставим вектору $f$ в соответствие будеву функцию
+$\in \map(\tw^n, \tw)$ следующим образом
+$$f \mapsto (\underbrace{x}_{\in \tw^n} \mapsto f_{x})$$
+где $f_x$ --- компонента вектора $f$ с номером, соответствующим двоичной
+записи $x$. Мы будем отождествлять вектор $f$ и соответствующую
+ему функцию и записывать $f(x) = f_x$.
+
+Отображение $\mu: \tw^{2^n} \to \tw^{2^n}$ называется 
+\emph{преобразованием Мёбиуса}, если выполнено:
+   $$f \mapsto g \iff \forall a \colon g(a) = \bigoplus\limits_{b \le a} f(b)$$
+\end{definition}
+
+Вычисление преобразования Мёбиуса по определению требует $3^n$ операций
+(это количество пар $x, y \in \tw^n \colon x \le y$). Но можно выполнить
+его оптимальнее, используя $2^n \cdot n$ операций.
+
+Действительно, рассмотрим $f$ и $g = \mu(f)$. 
+$$g(a_1, \ldots, a_n) = \bigoplus\limits_{b \le a} f(b_1, \ldots, b_n) = 
+\bigoplus\limits_{\substack{b \le a \\ b_1 = 0}} f(b_1, \ldots, b_n) \oplus
+\bigoplus\limits_{\substack{b \le a \\ b_1 = 1}} f(b_1, \ldots, b_n)$$
+
+Теперь разберем два случая: $a_1 = 0$ и $a_1 = 1$:
+$$g(0, a_2, \ldots, a_n) = \bigoplus\limits_{\substack{b \le a \\ b_1 = 0}} f(b_1, \ldots, b_n)$$
+в этом случае второе слагаемое обращается в ноль, поскольку 
+$b_1 = 1 \implies b \not\le a$.
+$$g(1, a_2, \ldots, a_n) = 
+\bigoplus\limits_{\substack{b \le a \\ b_1 = 0}} f(b_1, \ldots, b_n) \oplus
+\bigoplus\limits_{\substack{b \le a \\ b_1 = 1}} f(b_1, \ldots, b_n)$$
+Заметим, что теперь в обоих случаях условие 
+$b \le a \iff (b_2, \ldots, b_n) \le (a_2, \ldots, a_n)$. Это дает нам
+возможность рассмотреть функции $f_0 (a') = f(0, a'_1, \ldots, a'_{n-1})$
+и $f_1(a') = f(0, a'_1, \ldots, a'_{n-1})$ и, используя прошлые рассуждения,
+записать
+$$g(0, a_2, \ldots, a_n) = \mu(f_0) (a_2, \ldots, a_n)$$
+и 
+$$g(1, a_2, \ldots, a_n) = \mu(f_0) (a_2, \ldots, a_n) \oplus
+                           \mu(f_1) (a_2, \ldots, a_n))$$
+Таким образом, мы свели задачу нахождения преобразования
+Мёбиуса для вектора из $\tw^{2^n}$ к двум задачам нахождения преобразования
+Мёбиуса для вектора из $\tw^{2^{n-1}}$ тогда время работы нашего
+алгоритма равно $T(n) = 2^n + 2T(n-1)$. Из этого соотношения легко
+видеть, что $T(n) = 2^n \cdot n$.      
+
+\section{Коды Рида-Маллера}                    
+                               
+
+\begin{definition}
+Для произвольного $r \in \{0, \ldots, m\}$ двоичный код Рида-Маллера $\mathscr{R}(r,m)$ 
+порядка $r$ и длины $2^m$ определяется как 
+    $$Lin \{v_{\alpha_1} \cdot \ldots \cdot v_{\alpha_p} \colon p \le r; \, 1 \le \alpha_i \le m\}$$
+то есть линейная оболочка мономов степени $\le r$ или, что то же самое, множество всех многочленов от $m$ 
+переменных над $\mathbb{F}_2$ степени не больше $r$.
+
+Собственно кодами будут характеристические векторы этих многочленов.
+\end{definition}
+
+Очевидно, что этот код является линейным. Значит, можно говорить о его размерности.
+
+\begin{note}
+Размерность $\mathscr{R}(r,m)$ равна $\sum\limits_{k=0}^r C_m^k$
+\end{note}
+
+\begin{proof}
+Из теоремы \ref{mebius} все мономы линейно независимы, а количество мономов степени $\le r$ равно
+$\sum\limits_{k=0}^r C_m^k$
+\end{proof}
+
+\subsection{Взаимосвязь кодов Рида-Маллера разных порядков}
+
+\begin{theorem}
+$$\mathscr{R}(r+1,m+1) = \{|u|u+v| : u \in \mathscr{R}(r+1,m),\, v \in \mathscr{R}(r,m)\}$$
+Здесь $|x|y|$ --- конкатенация $x$ и $y$
+\end{theorem}
+
+\begin{lemma}
+Пусть $f(v_1, \ldots, v_m)$ --- булева функция с характеристическим вектором $\phi$. Тогда
+характеристические векторы функций $g(v_1, \ldots, v_{m+1}) = f(v_1, \ldots, v_m)$ и $h(v_1, \ldots, v_{m+1}) = v_{m+1} f(v_1, \ldots, v_m)$
+равны, соответственно $|\phi|\phi|$ и $|\mathbf{0}|\phi|$
+\end{lemma}
+
+\begin{proof}
+Здесь $m+1$ cчитается старшей степенью. Тогда левой части соответствуют те значения переменных
+где $v_{m+1} = 0$, а правой --- те, где $v_{m+1}=$. Тогда в обеих частях характеристического 
+вектора $f$ будет вектор $\phi$. Левой части характеристического вектора $h$ будет соответствовать
+тождественный $0$, поскольку мы умножили на 0.
+\end{proof}
+
+\begin{proof}
+
+Рассмотрим $f \in \mathscr{R}(r+1,m+1)$. Давайте запишем 
+   $$f(v_1, \ldots, v_{m+1}) = \underbrace{g(v_1, \ldots, v_m)}_{deg \le r+1} + 
+   v_{m+1} \underbrace{h(v_1, \ldots, v_m)}_{deg \le r}$$
+  Вспомним лемму и заметим, что характеристические векторы слагаемых этой формулы равны 
+  $|\mathbf{1}_g|\mathbf{1}_g|$ и $|\mathbf{0}|\mathbf{1}_h|$ соответственно. Тогда
+  характеристический вектор их суммы равен $|\mathbf{1}_g|\mathbf{1}_g+\mathbf{1}_h|$.
+\end{proof}
+
+\begin{note}
+Похоже на формулу для биномиальных коэффициентов.
+\end{note}
+
+Теперь мы готовы к тому, чтобы найти расстояние между кодовыми словами в коде Рида-Маллера.
+
+\begin{theorem}
+Минимальное расстояние между словами в коде $\mathscr{R}(r,m)$ равно $2^{m-r}$
+\end{theorem}
+
+\begin{proof}
+Индукция по $m$. При $m=0$ существует один код Рида Миллера: $\mathscr{R}(0,0)$. Он 
+состоит из слов $0$ и $1$, расстояние между ними равно $1$.
+
+Пусть для всех $m < m_0$ доказано, докажем для $m_0$. Из прошлой теоремы $\mathscr{R}(r,m) = 
+\mathscr{R}(r,m-1) + \mathscr{R}(r-1,m-1)$. Рассмотрим $a_1, a_2 \in \mathscr{R}(r,m)$. Они имеют
+вид $|u_1|u_1+v_1|$ и $|u_2|u_2+v_2|$ соответственно. Тогда 
+$$d(a_1,a_2) = d(u_1, u_2) + d(u_1 + v_1, u_2 + v_2) \ge d(u_1,u_2) +
+ |\underbrace{d(u_1,u_2)}_{\ge 2^{m-r-1}} - \underbrace{d(v_1,v_2)}_{\ge 2^{m-r}}|$$
+ 
+ Поймём, что это неравенство действительно верно (здесь сумма вещественных чисел):
+ $$d(u_1 + v_1, u_2 + v_2) = \sum\limits_{i=1}^{2^m} d_i(u_1 + v_1, u_2 + v_2)$$
+ где $d_i(x,y) = 1$, если $i$-е символы $x$ и $y$ различаются и $0$, если совпадают.
+ Теперь разбором случаев можно доказать, что $d_i(a+b,c+d) \le |d_i(a,c) - d_i(b,d)|$:
+ \begin{center}
+ \begin{tabular}{| c c c c | c c c | c |}
+ \hline
+ a & b & c & d & $d_i(a+b,c+d)$ & $d_i(a,c)$ & $d_i(b,d)$ & $|\ldots|$ \\
+ \hline
+ 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+ 0 & 0 & 0 & 1 & 1 & 0 & 1 & 1 \\
+ 0 & 0 & 1 & 0 & 1 & 1 & 0 & 1 \\
+ 0 & 0 & 1 & 1 & 0 & 1 & 1 & 0 \\
+ \hline
+ \end{tabular}
+ \end{center}
+
+Здесь можно считать $a=b=0$, так как иначе можно перейти к $a \to a+a;\, b \to b+b;\, c \to c+a;\, d \to d + b$,
+не изменив обе части формулы и обратив $a,b$ в ноль. Таким образом можем записать
+
+$$\sum\limits_{i=1}^{2^m} d_i(u_1 + v_1, u_2 + v_2) \le \sum\limits_{i=1}^{2^m} |d_i(u_1,u_2) - d_i(v_1,v_2)| \le
+  |\sum\limits_{i=1}^{2^m} \big(d_i(u_1,u_2) - d_i(v_1,v_2)\big)| = |d(u_1,u_2) - d(v_1,v_2)|$$
+
+Теперь нужно разобрать два случая:
+\begin{itemize}
+\item $d(u_1,u_2) \ge d(v_1, v_2)$. Тогда $d(a_1, a_2) \ge 2^{m-r} + |\ldots| \ge 2^{m-r}$
+\item $d(v_1,v_2) > d(u_1, u_2)$. Тогда $d(a_1,a_2) \ge d(u_1,u_2) + d(v_1, v_2) - d(u_1,u_2) = d(v_1,v_2) \ge 2^{m-r}$
+\end{itemize}
+\end{proof}
+
+\subsection{Выколотые коды Рида-Маллера}
+\begin{definition}
+Для произвольного $r \in \{0, \ldots, m-1\}$ {\bfseries выколотый} двоичный код Рида-Маллера 
+$\mathscr{R}^*(r,m)$ порядка $r$ и длины $2^m$ определяется как 
+    $$\{x_1 x_2 \ldots x_{2^m-1} \colon x \in \mathscr{R}(r,m)\}$$
+то есть, получается из $\mathscr{R}(r,m)$ вычеркиванием элемента вектора, соответствующего $v_1 = \ldots = v_m = 0$
+\end{definition}
+
+Очевидно, что $\mathscr{R}^*(r,m)$ имеет длину $2^m-1$, минимальное расстояние $2^{m-r}-1$.
+
+\begin{proposition}
+Для $r < m$ верно $dim(\mathscr{R}^*(r,m)) = \sum\limits_{k=0}^r C_m^k$
+\end{proposition}
+\begin{proof}
+То есть, нужно доказать, что размерность равна размерности кода до выкалывания.
+Заметим, что по лемме о рандомизации, в каждой строке порождающей матрицы четное 
+количество единиц (так как $r<m$ и строки, соответствующей $v_1 \cdot \ldots \cdot v_m$,
+где только одна единица, в матрице нет).
+
+Тогда сложим все столбцы, кроме первого, и получим столбец вида $(1,0,\ldots,0)^{T}$.
+
+Таким образом, размерность линейной оболочки всех столбцов $\mathscr{R}(r,m)$ равна размерности
+линейной оболочки всех столбцов, кроме первого, то есть $dim(\mathscr{R}^*(r,m))$
+\end{proof}
+
+\subsection{Декодирование кода $\mathscr{R}(1,m)$}
+
+Рассмотрим на примере $m=3$. Порождающая матрица $\mathscr{R}(1,m)$ будет иметь размер $(m+1) \times 2^m$
+и будет состоять из векторов $\mathbf{1}, \mathbf{1}_{x_1}, \mathbf{1}_{x_2}, \mathbf{1}_{x_3}$:
+
+$$G = \begin{pmatrix}1 & 1 & 1 & 1 & 1 & 1 & 1 & 1  \\
+0 & 1 & 0 & 1 & 0 & 1 & 0 & 1  \\
+0 & 0 & 1 & 1 & 0 & 0 & 1 & 1  \\
+0 & 0 & 0 & 0 & 1 & 1 & 1 & 1  \\
+\end{pmatrix}$$
+
+Кодирование, как и в любом линейном коде --- домножение кодируемой строки на порождающую матрицу.
+
+Все возможные $16$ кодов получаются линейными комбинациями строк матрицы:
+$$A = \mathscr{R}(1,3) = \begin{pmatrix}
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0  \\
+1 & 1 & 1 & 1 & 1 & 1 & 1 & 1  \\
+0 & 1 & 0 & 1 & 0 & 1 & 0 & 1  \\
+1 & 0 & 1 & 0 & 1 & 0 & 1 & 0  \\
+0 & 0 & 1 & 1 & 0 & 0 & 1 & 1  \\
+1 & 1 & 0 & 0 & 1 & 1 & 0 & 0  \\
+0 & 1 & 1 & 0 & 0 & 1 & 1 & 0  \\
+1 & 0 & 0 & 1 & 1 & 0 & 0 & 1  \\
+0 & 0 & 0 & 0 & 1 & 1 & 1 & 1  \\
+1 & 1 & 1 & 1 & 0 & 0 & 0 & 0  \\
+0 & 1 & 0 & 1 & 1 & 0 & 1 & 0  \\
+1 & 0 & 1 & 0 & 0 & 1 & 0 & 1  \\
+0 & 0 & 1 & 1 & 1 & 1 & 0 & 0  \\
+1 & 1 & 0 & 0 & 0 & 0 & 1 & 1  \\
+0 & 1 & 1 & 0 & 1 & 0 & 0 & 1  \\
+1 & 0 & 0 & 1 & 0 & 1 & 1 & 0  \\
+\end{pmatrix}$$
+
+Закодируем какое-нибудь слово. Например $y = (1,0,0,1)$. $z = y G = (1, 1, 1, 1, 0, 0, 0, 0)$. 
+Кодовое расстояние равно $2^{3-1} = 4$. Поэтому код способен исправить только одну ошибку.
+Тогда пусть $z' = (0, 1, 1, 1, 0, 0, 0, 0)$. Преобразуем матрицу $A$ так, чтобы можно посчитать
+расстояния от декодируемого вектора до всех кодовых слов. $H_{ij} = 2 A_{ij} - 1$. Можно заметить,
+что $H$ --- это две матрицы Адамара, поставленные друг на друга. Преобразуем $z'$ тем же образом:
+$z''_i = 2 z'_i - 1$. 
+
+Рассмотрим $H (z'')^T$. $i$-й компонент этого вектора равен $(2^m - d(H_i, z')) - d(H_i, z') = 2^m - 2 d(H_i, z')$.
+Тогда вектор с минимальным расстоянием соответствует максимуму среди компонент $H (z'')^T$.
+
+$$H = \begin{pmatrix}
+-1 & -1 & -1 & -1 & -1 & -1 & -1 & -1\\
+1 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
+-1 & 1 & -1 & 1 & -1 & 1 & -1 & 1\\
+1 & -1 & 1 & -1 & 1 & -1 & 1 & -1\\
+-1 & -1 & 1 & 1 & -1 & -1 & 1 & 1\\
+1 & 1 & -1 & -1 & 1 & 1 & -1 & -1\\
+-1 & 1 & 1 & -1 & -1 & 1 & 1 & -1\\
+1 & -1 & -1
+ & 1 & 1 & -1 & -1 & 1\\
+-1 & -1 & -1 & -1 & 1 & 1 & 1 & 1\\
+1 & 1 & 1 & 1 & -1 & -1 & -1 & -1\\
+-1 & 1 & -1 & 1 & 1 & -1 & 1 & -1\\
+1 & -1 & 1 & -1 & -1 & 1 & -1 & 1\\
+-1 & -1 & 1 & 1 & 1 & 1 & -1 & -1\\
+1 & 1 & -1 & -1 & -1 & -1 & 1 & 1\\
+-1 & 1 & 1 & -1 & 1 & -1 & -1 & 1\\
+1 & -1 & -1 & 1 & -1 & 1 & 1 & -1\\
+\end{pmatrix}$$
+
+Тогда
+$$H (z'')^T = (2, -2, 2, -2, 2, -2, 2, -2, -6, 6, 2, -2, 2, -2, 2, -2)^T$$
+
+Максимальная компонента соответсвтует 10-й строке матрицы, а это и есть вектор $(1,1,1,1,0,0,0,0)$,
+который мы шифровали.
+
+
+\section{Преобразование Фурье и Уолша-Адамара для булевых функций}
+
+\begin{definition}
+\emph{Экспонента }булевой функции$\exp f\left(x\right)=\left(-1\right)^{f\left(x\right)}$
+\end{definition}
+Т.е. $\exp f:V_{n}\stackrel{f}{\longrightarrow}\left\{ 0,1\right\} 
+\longrightarrow\left\{ -1,1\right\} $
+
+
+\begin{definition}
+\emph{Дискретная функция Уолша}
+\[
+v\left(a,x\right)\coloneqq\left(-1\right)^{\left\langle a,x\right\rangle },\; a,x\in V_{n}
+\]
+
+
+\[
+v:\tw^n\times \tw^n\longrightarrow\left\{ 1,-1\right\} 
+\]
+
+\end{definition}
+На $a$ и $x$ мы смотрим одновременно и как на двоичные векторы из
+$\tw^n$, и как на целые числа, двоичная запись которых, дополненная
+при необходимости слева нулями, совпадает с этими векторами.
+
+
+\paragraph*{Свойства функции Уолша:}
+\begin{enumerate}
+\item $v\left(a,x\right)=v\left(x,a\right)$
+\item $\left|v\left(a,x\right)\right|=1$
+\item $v\left(0,x\right)=v\left(x,0\right)=1$
+\item $E$ линейное подпространство $\tw^n$\\
+$a\not\in E^{\perp}$\\
+Тогда 
+\[
+\sum_{x\in E}v\left(a,x\right)=0
+\]
+
+
+\begin{proof}
+$E_{0}\coloneqq\left\{ x\in E:\left\langle a,x\right\rangle =0\right\} ,E_{1}\coloneqq\left\{ x\in E:\left\langle a,x\right\rangle =1\right\} $
+
+Покажем, что $\left|E_{0}\right|=\left|E_{1}\right|$, тогда число
++1 и -1 в сумме будет одинаково.
+
+$a\not\in E^{\perp}\Rightarrow\exists x\in E:\left\langle a,x\right\rangle \not=0\Rightarrow E_{1}\not=\emptyset$
+\textcolor{blue}{$\left(E^{\perp}=\left\{ u\in \tw^n:\left\langle u,x\right\rangle =0,\forall x\in E\right\} \right)$}
+
+Пусть $y\in E_{1}$. Рассмотрим равенство $x+y=z$. Скалярно домножив
+на $a$ получим
+\[
+\left\langle a,x\right\rangle +\underbrace{\left\langle a,y\right\rangle }_{1}=\left\langle a,z\right\rangle 
+\]
+То есть если $x\in E_{1}$, то $z\in E_{0}$. И наоборот, если $x\in E_{0}$,
+то $z\in E_{1}.$ Отсюда легко видеть, что, прибавляя $y$ ко всем
+элементам $E_{1}$, получим элементы $E_{0}$. Значит, $E_{1}+y\subset E_{0}\Rightarrow\left|E_{1}\right|\leq\left|E_{0}\right|$.
+Так же прибавляя $y$ ко всем элементам $E_{0}$, получим элементы
+$E_{1}$. Значит, $E_{0}+y\subset E_{1}\Rightarrow\left|E_{0}\right|\leq\left|E_{1}\right|$.
+\end{proof}
+\end{enumerate}
+\begin{corollary}
+Т.к. ${\tw^n}^{\perp}=\left\{ 0\right\} $, 
+\[
+\sum_{x\in \tw^n}v\left(a,x\right)=\delta_{0}\left(a\right)2^{n}
+\]
+где 
+\[
+\delta_{0}\left(a\right)=\begin{cases}
+1, & \text{если }a=0\\
+0, & \text{если }a\not=0
+\end{cases}
+\]
+\end{corollary}
+
+
+\begin{definition}
+\emph{Преобразованием Фурье} булевой функции $f$ называется целочисленная
+функция на $\tw^n$, определяемая следующим равенством
+\[
+F_{f}\left(u\right)=\sum_{x\in \tw^n}f\left(x\right)v\left(x,u\right)
+\]
+
+
+Для каждого $u\in \tw^n$ значение $F_{f}\left(u\right)$ называется
+\emph{коэффициентом Фурье}.
+\end{definition}
+
+\begin{definition}
+\emph{Преобразованием Уолша-Адамара} булевой функции $f$ называется
+целочисленная функция на $\tw^n$, определяемая следующим равенством
+\[
+W_{f}\left(u\right)=F_{f}\left(\exp f\left(u\right)\right)=\sum_{x\in \tw^n}\exp f\left(x\right)v\left(x,u\right)=
+\]
+\[
+=\sum_{x\in \tw^n}\left(-1\right)^{f\left(x\right)}\left(-1\right)^{\left\langle x,u\right\rangle }=\sum_{x\in \tw^n}\left(-1\right)^{f\left(x\right)\oplus\left\langle x,u\right\rangle }=
+\]
+\[
+=\sum_{x\in \tw^n}\exp\left(f\left(x\right)\oplus\left\langle x,u\right\rangle \right)
+\]
+
+
+Для каждого $u\in \tw^n$ значение $W_{f}\left(u\right)$ называется
+\emph{коэффициентом Уолша-Адамара}.\end{definition}
+
+Уолш: от функции Уолша.
+
+Адамар: функцию Уолша можно получить из матрицы Адамара. Рекурсивно
+умеем формировать матрицы Адамара размера $2^{n}$ (мы полученные
+таким спобом матрицы матрицами Сильвестра). 
+\[
+H_{new}=\left[\begin{array}{cc}
+H & H\\
+H & -H
+\end{array}\right]
+\]
+Тогда строчки --- функции Уолша. То есть $x$ соответствует номеру
+столбца, $a$ соответствует номеру строки. Элемент $H_{a,x}=v\left(a,x\right)$.
+\begin{example}
+\[
+H_{4}=\left[\begin{array}{ccccc}
+ & \underline{x_{1}=00} & \underline{x_{2}=01} & \underline{x_{3}=10} & \underline{x_{4}=11}\\
+a_{1}=00| & 1 & 1 & 1 & 1\\
+a_{2}=01| & 1 & -1 & 1 & -1\\
+a_{3}=10| & 1 & 1 & -1 & -1\\
+a_{4}=11| & 1 & -1 & -1 & 1
+\end{array}\right]
+\]
+
+
+\end{example}
+
+\begin{definition}
+Часто коэффициенты Фурье и коэффициенты Уолша-Адамара называются \emph{спектральными
+коэффициентами}.\end{definition}
+\begin{theorem}
+Коэффициенты Фурье и Уолша-Адамара связаны соотношением
+\[
+W_{f}\left(u\right)=2^{n}\delta_{0}\left(u\right)-2F_{f}\left(u\right)
+\]
+\end{theorem}
+\begin{proof}
+\[
+W_{f}\left(u\right)=\sum_{x\in \tw^n}\exp f\left(x\right)v\left(x,u\right)=\sum_{x\in\supp f}\underbrace{\exp\underbrace{f\left(x\right)}_{1}}_{-1}v\left(x,u\right)+\sum_{x\in \tw^n\setminus\supp f}\underbrace{\exp\underbrace{f\left(x\right)}_{0}}_{1}v\left(x,u\right)=
+\]
+\[
+=-\sum_{x\in\supp f}v\left(x,u\right)+\sum_{x\in \tw^n\setminus\supp f}v\left(x,u\right)
+\]
+По замечанию к 4-ому свойству 
+\[
+\sum_{x\in \tw^n}v\left(a,x\right)=\delta_{0}\left(a\right)2^{n}
+\]
+\[
+\sum_{x\in \tw^n\setminus\supp f}v\left(x,u\right)=\underbrace{\sum_{x\in \tw^n}v\left(x,u\right)}_{=\delta_{0}\left(u\right)2^{n}}-\sum_{x\in\supp f}v\left(x,u\right)
+\]
+Кроме того
+\[
+F_{f}\left(u\right)=\sum_{x\in \tw^n}f\left(x\right)v\left(u,x\right)=\sum_{x\in\supp f}v\left(u,x\right)
+\]
+Итого
+\[
+W_{f}\left(u\right)=\delta_{0}\left(u\right)2^{n}-2\sum_{x\in\supp f}v\left(x,u\right)=\delta_{0}\left(u\right)2^{n}-2F_{f}\left(u\right)
+\]
+\end{proof}
+\begin{theorem}[формула обращения]
+Для преобразования Уолша-Адамара справедлива формула обращения.
+\[
+\exp f\left(x\right)=2^{-n}\sum_{u\in \tw^n}W_{f}\left(u\right)v\left(x,u\right)
+\]
+\end{theorem}
+\begin{proof}
+\[
+2^{-n}\sum_{u\in \tw^n}W_{f}\left(u\right)v\left(x,u\right)=2^{-n}\sum_{u\in \tw^n}\sum_{y\in \tw^n}\left(-1\right)^{f\left(y\right)}\underbrace{\left(-1\right)^{\left\langle y,u\right\rangle }\left(-1\right)^{\left\langle x,u\right\rangle }}_{\left(-1\right)^{\left\langle x\oplus y,u\right\rangle }=v\left(x\oplus y,u\right)}=
+\]
+\[
+=2^{-n}\sum_{y\in \tw^n}\left(-1\right)^{f\left(y\right)}\sum_{u\in \tw^n}v\left(x\oplus y,u\right){\color{red}=}
+\]
+\[
+\sum_{u\in \tw^n}v\left(x\oplus y,u\right)=\begin{cases}
+2^{n}, & x\oplus y=0\\
+0, & x\oplus y\not=0
+\end{cases}
+\]
+Т.е. от всех сумм останется только одно слагаемое при $y=x$
+\[
+{\color{red}=}2^{-n}\left(-1\right)^{f\left(x\right)}2^{n}=\exp f\left(x\right)
+\]
+
+\end{proof}
+Таким образом, коэффициенты Уолша-Адамара однозначно определяют булеву
+функцию. Вместе с тем, не любой набор из $2^{n}$ чисел может быть
+набором коэффициентов Уолша-Адамара некоторой булевой функции. 
+
+\textcolor{blue}{Задачи 2.38, 2.39.}
+\begin{theorem}[равенство Парсеваля]
+Коэффициенты Уолша-Адамара удовлетворяют соотношению:
+\[
+\sum_{u\in \tw^n}W_{f}^{2}\left(u\right)=2^{2n}
+\]
+\end{theorem}
+\begin{proof}
+\[
+\sum_{u\in \tw^n}W_{f}^{2}\left(u\right)=\sum_{u\in \tw^n}\left(\sum_{x\in \tw^n}\left(-1\right)^{f\left(x\right)\oplus\left\langle x,u\right\rangle }\right)^{2}=\sum_{u\in \tw^n}\left(\sum_{x\in \tw^n}\left(-1\right)^{f\left(x\right)\oplus\left\langle x,u\right\rangle }\right)\left(\sum_{y\in \tw^n}\left(-1\right)^{f\left(y\right)\oplus\left\langle y,u\right\rangle }\right)=
+\]
+\[
+=\sum_{u\in \tw^n}\sum_{x,y\in \tw^n}\left(-1\right)^{f\left(x\right)\oplus\left\langle x,u\right\rangle \oplus f\left(y\right)\oplus\left\langle y,u\right\rangle }=\sum_{x,y\in \tw^n}\left(-1\right)^{f\left(x\right)\oplus f\left(y\right)}\underbrace{\sum_{u\in \tw^n}\left(-1\right)^{\left\langle x\oplus y,u\right\rangle }}_{=0\text{, при }x\not=y}=\sum_{x\in \tw^n}\sum_{x\in \tw^n}\left(-1\right)^{\overbrace{f\left(x\right)\oplus f\left(x\right)}^{0}}=
+\]
+\[
+=2^{2n}
+\]
+\end{proof}
+\begin{proposition}
+Коэффициенты алгебраический нормальной формы $g_{f}\left(u\right)$
+выражаются через коэффициенты Уолша-Адамара следующим образом:
+\[
+g_{f}\left(u\right)=2^{wt\left(u\right)-1}-2^{wt\left(u\right)-n-1}\sum_{\alpha\preccurlyeq u\oplus1}W_{f}\left(\alpha\right)
+\]
+\end{proposition}
+
+\begin{proof}
+Подставим формулу для коэффициентов Уолша-Адамара:
+\[
+g_f(u) = 2^{wt(u) - 1} - 2^{wt(u) - n - 1}
+ \sum\limits_{\alpha \le u \oplus \mathbf{1}} 
+     \sum\limits_{x \in \tw^n} \exp(f(x) \oplus \langle x, \alpha \rangle) 
+ = 2^{wt(u) - 1} - 2^{wt(u) - n - 1}
+   \sum\limits_{x \in \tw^n} \exp ( f(x) ) 
+   \sum\limits_{\alpha \le u \oplus \mathbf{1}} \exp (\langle x, \alpha \rangle)
+ \]
+ Величина $\sum\limits_{\alpha \le u \oplus \mathbf{1}} \exp (\langle x, \alpha \rangle)$
+ обращается в $0$ при $x$ не ортогональном $\{y \le u \oplus \mathbf{1}\}$ и равна $2^{n - wt(u)}$ при 
+ $x \bot \{y \le u \oplus \mathbf{1}\} \iff x \in \{y \le u\}$.
+ \[
+ = 2^{wt(u) - 1} - 2^{wt(u) - n - 1}
+   \sum\limits_{x \le u} \exp(f(x)) 2^{n - wt(u)} = 
+   {1 \over 2} 2^{wt(u)} - {1 \over 2} \sum\limits_{x \le u} \exp(f(x)) =
+   {1 \over 2}  \sum\limits_{x \le u} \underbrace{(1 - \exp(f(x)))}_{= 2 f(x)} = 
+    \sum\limits_{x \le u} f(x)
+   \]
+\end{proof}
+
+\section{Быстрое вычисление коэффициентов Уолша-Адамара}
+
+Коэффициенты Уолша-Адамара "--- это коэффициенты Фурье для функции
+$\exp f$, поэтому достаточно научиться вычислять коэффициенты Фурье.
+Будем действовать аналогично вычислению преобразования Мёбиуса.
+Пусть $u \in \tw^n$. Обозначим $u' = (u_2, \ldots, u_n)$, аналогично для
+$x \in \tw^n$ обозначим $x' = (x_2, \ldots, x_n)$
+$$F_f (u) = \sum\limits_{x \in \tw^n} f(x_1, x') \exp (x_1 v_1 + \langle x', u' \rangle)
+ = \sum\limits_{x \in \tw^{n-1}} f(0, x) \exp(\langle x, u' \rangle)
+ + f(1, x) \exp(u_1) \exp(\langle x, u' \rangle)$$
+Пусть $f_0(x) = f(0, x)$ и $f_1(x) = f(1,x)$, тогда
+$$F_f(u) = F_{f_0} (u') + \exp{u_1} F_{f_1} (u')$$
+Таким образом, мы свели задачу преобразования Фурье для вектора
+$\in \tw^{2^n}$ к задаче вычисления преобразования Фурье для двух 
+векторов из $\tw^{2^{n-1}}$. Аналогично вычислению преобразования
+Мёбиуса, имеем время работы $T(n) = 2^n + 2T(n-1) = 2^n \cdot n$
+
+\section{Производная булевой функции по направлению}
+
+\begin{definition}
+Производной булевой функции $f$ по направлению $u \in \tw^n$ называется
+булева функция $$D_u f (x) = f(x \oplus u) \oplus f(x)$$
+\end{definition}
+
+\begin{definition}
+Производной булевой функции $f$ по направлению подпространства $L \subset \tw^n$
+называется функция
+$$D_u f (x) = \bigoplus\limits_{u \in F} f(x \oplus u)$$
+
+\end{definition}
+
+\begin{remark}
+Если $L = \langle u_1, \ldots, u_k \rangle$, то $D_L f = D_{u_k} D_{u_{k-1}} \ldots D_{u_1} f$
+\end{remark}
+\begin{proof}
+Индукция по $k$. Для $k=1$ очевидно. Пусть $L = Lin (u, L')$,
+докажем, что $D_L f (x) = D_u D_{L'} (x)$.
+\[
+D_u D_{L'} (x) = D_u \bigoplus\limits_{v \in L'} f(x \oplus v) = 
+\bigoplus\limits_{v \in L'} f(x \oplus v) \oplus \bigoplus\limits_{v \in L'} f(x \oplus v \oplus u) 
+= \bigoplus\limits_{v \in L} f(x \oplus v)
+\]
+\end{proof}
+
+\begin{proposition}
+Верны следующие утверждения
+\begin{enumerate}
+\item $\forall L \subset \tw^n$ подпространства 
+$\forall f \in \map(\tw^n, \tw), \, u \in L, \, x \in \tw^n$ верно
+$$D_L f(x) = D_L f(x \oplus u)$$
+\item $\forall f,g \in \map(\tw^n, \tw)$, $\forall$ подпространства $L \subset \tw^n$
+    $$D_L (f \oplus g) = D_L f \oplus D_L g$$
+\item $\forall f \in \map(\tw^n, \tw)$, $\forall u,v,x \in \tw^n$
+
+    $$D_{u \oplus v} f(x) = D_u f(x) \oplus D_v f(x \oplus u)$$
+\item $\forall u,x \in \tw^n \, D_u f(x) = 0 \iff f = \text{const}$
+\item $\forall u \in \tw^n \, D_u f = \text{const} \iff 
+      \exists \alpha \in \tw^n, \beta \in \tw \colon 
+      f = \langle \alpha, x \rangle \oplus \beta$
+      то есть $f$ --- афинная.
+\end{enumerate}
+
+\begin{proof}
+\begin{enumerate}
+\item $D_L f(x) = \bigoplus\limits_{v \in L} f(x \oplus v) = 
+                  \bigoplus\limits_{v \in L} f(x \oplus (u\oplus v))
+                  = \bigoplus\limits_{v \in L} f((x \oplus u )\oplus v)
+                  = D_L f(x \oplus u)$
+\item $D_L (f \oplus g) (x) = \bigoplus\limits_{u \in L} f(x \oplus u) 
+          \oplus g(x \oplus v) = D_L f (x) \oplus D_L g(x)$
+\item $D_{u} f(x) \oplus D_v f(x \oplus u) = f(u \oplus x) \oplus f(x)
+       \oplus f(x \oplus u \oplus v) \oplus f(x \oplus u) =
+        f(x) \oplus f(x \oplus u \oplus v) =  D_{u \oplus v} f(x)$
+\item Очевидно по определению
+\item $D_u f (x) = \alpha_u \implies f(x) \oplus f(x \oplus u) = \alpha_u$
+      Тогда $f(u) = f(0) + \alpha_u$, тогда $f(x) \oplus f(y) = \alpha_{x \oplus y}
+       = f(0) \oplus f(x \oplus y)$.
+      Тогда $\sum\limits_{i=1}^k f(x_i) = f(\sum\limits_{i=1}^k x_i) + k f(0)$.
+      Пусть $e_1, \ldots, e_n$ "--- единичные векторы. Тогда
+      $$f(x) = \langle (f(e_1), \ldots, f(e_n)), x \rangle \oplus (w(x) \mod 2 \oplus 1) f(0) =
+       \langle (f(e_1), \ldots, f(e_n)) + (f(0), \ldots, f(0)), x \rangle 
+       \oplus f(0)$$
+\end{enumerate}
+\end{proof}
+
+
+\end{proposition}

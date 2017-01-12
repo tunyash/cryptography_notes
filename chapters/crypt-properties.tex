@@ -1,0 +1,112 @@
+\lecture{Криптографические свойства булевых функций}{}{И. Агафонова}
+
+\section{Нелинейность}
+\begin{definition}
+Нелинейностью булевой функции $f: \{0,1\}^n \to \{0,1\}$ называется число
+   $$N_f = \min\limits_{g \in \mathscr{A}_n} d(f,g)$$
+ где $\mathscr{A}_n$ --- пространство афинных функций (имеющих как многочлены степень не более 1) и
+  $d(f,g) = |\{x \colon f(x) \neq g(x)\}|$
+\end{definition}
+
+\begin{note}
+Легко видеть, что для любой $f \in \mathscr{A}_n$ существует $u \in \{0,1\}^n$ и 
+$b \in \{0,1\}$ такой, что $f(x) = (u,x) \oplus b$
+\end{note}
+
+\begin{theorem}
+$$N_f = 2^{n-1} - {1 \over 2} \max\limits_{u \in \{0,1\}^n} |W_f(u)|$$
+\end{theorem}
+\begin{proof}
+\[
+W_f(u) = \sum\limits_{x \in \{0,1\}^n} \exp f(x) v(x,u) = 
+\sum\limits_{x \in \{0,1\}^n} (-1)^{f(x) \oplus (u,x)} = 
+\]
+\[
+\sum\limits_{x \in \{0,1\}^n} \exp (f\oplus (u,x))(x) \underbrace{v(x,0)}_{=1} = W_{f \oplus u} (0)
+= |\{x \colon f(x)\oplus (u,x) = 0\}| - |\{x \colon f(x)\oplus (u,x) = 1\}| 
+\]
+\[
+=  (2^n - d(f(x), (u,x))) - d(f(x), (u,x)) = 2^n - 2 d(f(x), (u,x))
+\]
+
+Выражая из этой формулы расстояние 
+$$ d(f(x), (u,x)) = 2^{n-1} - {1 \over 2} W_f(u)$$
+теперь выразим расстояние до функции $(u,x) \oplus 1$
+$$d(f(x), (u,x) \oplus 1)) = 2^n - (2^{n-1} - {1 \over 2} W_f(u)) = 2^{n-1} + {1 \over 2} W_f(u)$$
+Тогда 
+$$\min \{d(f(x), (u,x)), d(f(x), (u,x) \oplus 1)\} = 2^{n-1} - {1 \over 2} |W_f(u)|$$
+и, наконец 
+$$N_f = \min\limits_{g \in \mathscr{A}_n} d(f,g)
+ = \min\limits_{\substack{u \in \{0,1\}^n \\ b \in \{0,1\}}} d(f,(u,x)\oplus b) = 
+ \min\limits_{u \in \{0,1\}^n} \big|2^{n-1} - {1 \over 2} |W_f(u)|\big| =$$
+ $$ = 2^{n-1} - {1 \over 2} \max\limits_{u \in \{0,1\}^n} |W_f(u)|$$
+\end{proof}
+
+\section{Автокорреляция}
+
+\begin{definition}
+Пусть $f,g \in \mathscr{F}_n = \map(\tw^n, \tw)$. Определим функцию 
+$\Delta_{f,g}: \tw^n \to \mathbb{Z}$ следующим образом:
+$$\Delta_{f,g} (u) = \sum\limits_{x \in \tw^n} \exp (f(x) \oplus g(x \oplus u)$$
+Назовем эту функцию \emph{функцей взаимной корреляции}.
+\end{definition}
+
+\begin{proposition}
+$\forall u \in \tw^n, \forall f,g \in \mathscr{F}_n \colon 
+   \Delta_{f,g} (u) = \Delta_{g,f} (u)$
+\end{proposition}
+
+\begin{definition}
+Для $f \in \mathscr{F}_n$ функция $\Delta_f (u) = \Delta_{f,f} (u)$ называется
+функцией автокорреляции.
+\end{definition}
+
+\begin{remark}
+Автокорреляция $f$ в точке $u \in \tw^n$ равна нулевому коэффициенту
+Уолша-Адамара производной $f$ по направлению $u$:
+$$\Delta_f(u) = W_{D_u f} (0)$$
+\end{remark}
+
+\begin{proof}
+$$W_{D_f u} (0) = \sum\limits_{x \in \tw^n} \exp (D_u f(x)) 
+            = \sum\limits \exp (f(x+u) + f(x)) = \Delta_f (u)$$
+\end{proof}
+
+\begin{remark}
+Не любой набор из $2^n$ чисел может быть набором значений
+автокорреляции.
+\end{remark}
+
+\begin{theorem}
+Пусть $f,g \in \mathscr{F}_n$. Тогда
+  $$(\Delta_{f,g} (0), \ldots, \Delta_{f,g} (2^n - 1)) H_n =
+     (W_f(0) \cdot W_g(0), \ldots, W_f(2^n -1) \cdot W_g(2^n-1))$$
+ где $H_n$ "--- матрица Сильвестра размера $2^n \times 2^n$
+\end{theorem}
+
+\begin{proof}
+Без доказательства
+\end{proof}
+
+\begin{corollary}
+Пусть $f \in \mathscr{F}_n$ тогда 
+$$(\Delta_f(0), \ldots, \Delta_f(2^n-1)) H_n = (W_f^2(0), \ldots, W_f^2 (2^n -1)$$
+или
+$$\sum\limits_{x \in \tw^n} \Delta_f(x) \exp(\langle x,u \rangle) = W_f^2(u)$$
+для всех $u \in \tw^n$.
+\end{corollary}
+
+\begin{theorem}
+Определим $h \in \mathscr{F}_{n+m}$ как $h(x,y) = f(x) + g(y)$, где
+$f \in \mathscr{F}_n,\, g \in \mathscr{F}_m$. Тогда
+   $$\forall \alpha \in \tw^n, \beta \in \tw^m\colon 
+                  \Delta_h(\alpha, \beta) = \Delta_f(\alpha) \Delta_g(\beta)$$
+\end{theorem}
+
+\begin{proof}
+$$\Delta_h (\alpha, \beta) = 
+\sum\limits_{\substack{x \in \tw^n \\ y \in \tw^m}} 
+\exp( h(x,y) \oplus h(x+\alpha, y+\beta)) = $$ 
+$$\sum\limits_{\substack{x \in \tw^n \\ y \in \tw^m}}
+\exp(f(x) \oplus g(y) \oplus f(x + \alpha) \oplus g(y + \beta)) = \Delta_f(\alpha) \Delta_g(\beta)$$
+\end{proof}

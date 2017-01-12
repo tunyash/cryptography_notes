@@ -1,0 +1,29 @@
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.11.14)  12 JAN 2017 02:23
+entering extended mode
+ restricted \write18 enabled.
+ file:line:error style messages enabled.
+ %&-line parsing enabled.
+**boolean-functions.tex
+(./boolean-functions.tex
+LaTeX2e <2011/06/27>
+Babel <3.9h> and hyphenation patterns for 9 languages loaded.
+./boolean-functions.tex:1: Undefined control sequence.
+l.1 \lecture
+            {Булевы функции и их свойства}{}{}
+? 
+./boolean-functions.tex:1: Emergency stop.
+l.1 \lecture
+            {Булевы функции и их свойства}{}{}
+End of file on the terminal!
+
+ 
+Here is how much of TeX's memory you used:
+ 5 strings out of 494515
+ 173 string characters out of 6173717
+ 49073 words of memory out of 5000000
+ 3326 multiletter control sequences out of 15000+600000
+ 3640 words of font info for 14 fonts, out of 8000000 for 9000
+ 430 hyphenation exceptions out of 8191
+ 5i,0n,1p,90b,8s stack positions out of 5000i,500n,10000p,200000b,80000s
+./boolean-functions.tex:1:  ==> Fatal error occurred, no output PDF file produc
+ed!
