@@ -3,7 +3,7 @@
 \section{Нелинейность}
 \begin{definition}
 Нелинейностью булевой функции $f: \{0,1\}^n \to \{0,1\}$ называется число
-   $$N_f = \min\limits_{g \in \mathscr{A}_n} d(f,g)$$
+   $$\mathcal{N}_f = \min\limits_{g \in \mathscr{A}_n} d(f,g)$$
  где $\mathscr{A}_n$ --- пространство афинных функций (имеющих как многочлены степень не более 1) и
   $d(f,g) = |\{x \colon f(x) \neq g(x)\}|$
 \end{definition}
@@ -14,7 +14,7 @@ $b \in \{0,1\}$ такой, что $f(x) = (u,x) \oplus b$
 \end{note}
 
 \begin{theorem}
-$$N_f = 2^{n-1} - {1 \over 2} \max\limits_{u \in \{0,1\}^n} |W_f(u)|$$
+$$\mathcal{N}_f = 2^{n-1} - {1 \over 2} \max\limits_{u \in \{0,1\}^n} |W_f(u)|$$
 \end{theorem}
 \begin{proof}
 \[
@@ -36,7 +36,7 @@ $$d(f(x), (u,x) \oplus 1)) = 2^n - (2^{n-1} - {1 \over 2} W_f(u)) = 2^{n-1} + {1
 Тогда 
 $$\min \{d(f(x), (u,x)), d(f(x), (u,x) \oplus 1)\} = 2^{n-1} - {1 \over 2} |W_f(u)|$$
 и, наконец 
-$$N_f = \min\limits_{g \in \mathscr{A}_n} d(f,g)
+$$\mathcal{N}_f = \min\limits_{g \in \mathscr{A}_n} d(f,g)
  = \min\limits_{\substack{u \in \{0,1\}^n \\ b \in \{0,1\}}} d(f,(u,x)\oplus b) = 
  \min\limits_{u \in \{0,1\}^n} \big|2^{n-1} - {1 \over 2} |W_f(u)|\big| =$$
  $$ = 2^{n-1} - {1 \over 2} \max\limits_{u \in \{0,1\}^n} |W_f(u)|$$
@@ -47,7 +47,7 @@ $$N_f = \min\limits_{g \in \mathscr{A}_n} d(f,g)
 \begin{definition}
 Пусть $f,g \in \mathscr{F}_n = \map(\tw^n, \tw)$. Определим функцию 
 $\Delta_{f,g}: \tw^n \to \mathbb{Z}$ следующим образом:
-$$\Delta_{f,g} (u) = \sum\limits_{x \in \tw^n} \exp (f(x) \oplus g(x \oplus u)$$
+$$\Delta_{f,g} (u) = \sum\limits_{x \in \tw^n} \exp (f(x) \oplus g(x \oplus u))$$
 Назовем эту функцию \emph{функцей взаимной корреляции}.
 \end{definition}
 
@@ -62,6 +62,7 @@ $\forall u \in \tw^n, \forall f,g \in \mathscr{F}_n \colon
 \end{definition}
 
 \begin{remark}
+\label{autocor_derivative}
 Автокорреляция $f$ в точке $u \in \tw^n$ равна нулевому коэффициенту
 Уолша-Адамара производной $f$ по направлению $u$:
 $$\Delta_f(u) = W_{D_u f} (0)$$
@@ -90,7 +91,7 @@ $$W_{D_f u} (0) = \sum\limits_{x \in \tw^n} \exp (D_u f(x))
 
 \begin{corollary}
 Пусть $f \in \mathscr{F}_n$ тогда 
-$$(\Delta_f(0), \ldots, \Delta_f(2^n-1)) H_n = (W_f^2(0), \ldots, W_f^2 (2^n -1)$$
+$$(\Delta_f(0), \ldots, \Delta_f(2^n-1)) H_n = (W_f^2(0), \ldots, W_f^2 (2^n -1))$$
 или
 $$\sum\limits_{x \in \tw^n} \Delta_f(x) \exp(\langle x,u \rangle) = W_f^2(u)$$
 для всех $u \in \tw^n$.
@@ -108,5 +109,616 @@ $$\Delta_h (\alpha, \beta) =
 \sum\limits_{\substack{x \in \tw^n \\ y \in \tw^m}} 
 \exp( h(x,y) \oplus h(x+\alpha, y+\beta)) = $$ 
 $$\sum\limits_{\substack{x \in \tw^n \\ y \in \tw^m}}
-\exp(f(x) \oplus g(y) \oplus f(x + \alpha) \oplus g(y + \beta)) = \Delta_f(\alpha) \Delta_g(\beta)$$
+\exp(f(x) \oplus g(y) \oplus f(x + \alpha) \oplus g(y + \beta)) 
+= \Delta_f(\alpha) \Delta_g(\beta)$$
 \end{proof}
+
+\begin{corollary}
+$\forall f \in \mathscr{F}_n$ выполнено $|\supp \Delta_f| \cdot |\supp W_f| \ge 2^n$,
+где $\supp \Delta_f = \{x \colon \Delta_f (x) \neq 0\}$;
+    $\supp W_f = \{x \colon W_f (x) \neq 0\}$.
+\end{corollary}
+
+\section{Уравновешенность, устойчивость и корреляционная имунность}
+
+\subsection{Уравновешенность}
+\begin{definition}
+Функция $f: \{0,1\}^n \to \{0,1\}$ называется, уравновешенной, если для 
+  $$|\{x \colon f(x) = 0\}| = 2^{n-1}$$,
+то есть, если она принимает значение $0$ ровно в половине случаев.
+\end{definition}
+
+Если функция уравновешена, то она наиболее оптимально сужает множество 
+возможных прообразов, то есть, сообщает ровно 1 бит информации о прообразе.
+
+\begin{proposition}
+\label{eqweight_WH}
+$f$ уравновешенна $\iff$ $W_f (0^n) = 0$, где $F_f$ --- преобразование Фурье функции $f$.
+\end{proposition}
+
+\begin{proof}
+$W_f (0^n) = \sum\limits_{x \in \{0,1\}^n} (-1)^{f(x)} \underbrace{v(x,0^n)}_{ = 1} 
+= \sum\limits_{x \in \{0,1\}^n} (-1)^{f(x)} 
+= |\{x \colon f(x) = 0\}| - |\{x \colon f(x) = 1\}|$
+
+Так как $\{x \colon f(x) = 0\}\cap \{x \colon f(x) = 1\} = \emptyset$,
+ получили, что требовалось.
+\end{proof}
+
+\subsection{Корелляционная имунность}
+\begin{definition}
+Пусть $f: \{0,1\}^n \to \{0,1\}$, $1 \le i_1 < \ldots < i_m \le n$,
+ $a_1, \ldots, a_m \in \{0,1\}$. Тогда
+обозначим $f_{i_1, \ldots, i_m}^{a_i \ldots, a_m}$ функцию из
+ $\{0,1\}^{n-m}$ полученную как сужение функции $f$ на множество
+   $\{x \colon x_{i_k} = a_k\}$ с введением естественных координат.
+\end{definition}
+
+\begin{definition}
+Пусть $f: \{0,1\}^n \to \{0,1\}$. $f$ называется корелляционно-имунной, если
+ для любых $1 \le i_1 < \ldots < i_m \le n$, $a_1, \ldots, a_m \in \{0,1\}$
+ выполнено
+ $$w(f_{i_1, \ldots, i_m}^{a_i \ldots, a_m}) = {w(f) \over 2^m}$$
+\end{definition}
+
+\subsection{Устойчивость}
+\begin{definition}
+Функция $f: \{0,1\}^n \to \{0,1\}$ называется $m$-устойчивой, если для любых $1 \le i_1 < \ldots < i_m \le n$
+и любых $a_1, \ldots, a_m \in \{0,1\}$ функция, полученная из $f$ сужением на множество $\{x \colon x_{i_k} = a_k\}$
+уравновешенна. 
+\end{definition}
+
+Вспомним несколько свойств преобразования Уолша-Адамара.
+
+\begin{proposition}
+Пусть $E$ --- линейное подпространство $\{0,1\}^n$. Тогда $F_{\mathbf{1}_E} = |E| \mathbf{1}_{E^{\bot}}$
+\end{proposition}
+\newcommand{\FF}[0]{\mathscr{F}}
+\begin{definition}
+Обозначим $\FF(f) = W_f(0)$
+\end{definition}
+
+\begin{definition}
+Бинарной производной функции $f: \{0,1\}^n \to \{0,1\}$ называется функция $D_b f (x) = f(x) \oplus f(x+b)$
+\end{definition}
+
+\begin{proposition}
+Для бинарной $f$ выполняется $W_f^2(u) = \sum\limits_{b \in \{0,1\}^n} \FF(D_b(f)) (-1)^{(u,b)}$
+\end{proposition}
+
+\begin{proof}
+Распишем правую часть:
+$$\sum\limits_{b \in \{0,1\}^n} \FF(D_b(f)) (-1)^{(u,b)} = 
+\sum\limits_{b \in \{0,1\}^n} \sum\limits_{g \in \{0,1\}^n} (-1)^{f(g) \oplus f(g + b)} (-1)^{(u,b)}$$
+поменяем обозначения
+$$\sum\limits_{h \in \{0,1\}^n} \sum\limits_{g \in \{0,1\}^n} (-1)^{f(g) \oplus f(h)} (-1)^{(u,g \oplus h)}$$
+и по линейности скалярного произведения получаем
+$$\bigg(\sum\limits_{h \in \{0,1\}^n}  (-1)^{f(h)} (-1)^{(u, h)}\bigg) \cdot
+   \bigg(\sum\limits_{g \in \{0,1\}^n}  (-1)^{f(g)} (-1)^{(u, g)}\bigg) = W_f^2(u)$$
+\end{proof}
+
+
+
+
+\begin{theorem}
+$f: \{0,1\}^n \to \{0,1\}$ является $m$-устойчивой $\iff \forall u \colon w(u) \le m$ выполняется $W_f(u) = 0$
+\end{theorem}
+
+Уравновешенные функции являются 0-устойчивыми и для них мы эту теорему уже доказали.
+
+\begin{lemma}
+Пусть $E$ и $E'$ --- подпространства $\{0,1\}^n$ такие, что $\underbrace{E + E'}_{\text{прямая сумма}}
+ = \{0,1\}^n$ и $E \cap E' = \{0\}$.
+Пусть $h_a$ --- сужение $f$ на сдвинутое подпространство $E + a$. Тогда выполняется
+$$\sum\limits_{u \in E^{\bot}} W_f^2 (u) = |E^{\bot}| \sum\limits_{a \in E'} W_{h_a}^2 (0)$$
+\end{lemma}
+
+\begin{proof}
+$$\sum\limits_{u \in E^{\bot}} W_f^2(u) = $$
+по второму утверждению
+$$\sum\limits_{u \in E^{\bot}} \sum\limits_{b \in \{0,1\}^n} \FF(D_b f) (-1)^{(u,b)} = $$
+поменяем местами суммы
+$$ \sum\limits_{b \in \{0,1\}^n} \FF(D_b f) \underbrace{\sum\limits_{u \in E^{\bot}} (-1)^{(u,b)}}_
+{F_{\mathbf{1}_{E^{\bot}}} (b)} = $$
+по первому утверждению
+$$  \sum\limits_{b \in \{0,1\}^n} \FF(D_b f) |E^{\bot}| \mathbf{1}_E (b) = |E^{\bot}| \sum\limits_{b \in E} \FF(D_b f)$$
+теперь, так как $\{0,1\}^n$ является прямой суммой $E$ и $E'$ можно записать $f = \sum\limits_{e \in E'} h_e$
+$$|E^{\bot}| \sum\limits_{b \in E} \FF\big( D_b \sum\limits_{e \in E'} h_e\big)$$
+производная и преобразование Уолша-Адамара линейны, поэтому вынесем сумму по $e$ вовне
+$$= |E^{\bot}| \sum\limits_{e \in E'} \big(\sum\limits_{b \in E} \FF(D_b h_e)\big)$$
+теперь применим второе утверждение еще раз, пользуясь тем, что $E$ --- линейное пространство
+$$|E^{\bot}| \sum\limits_{e \in E'} \FF^2(D_e f)$$
+\end{proof}
+
+\begin{proof}
+Рассмотрим произвольное множество $I \subset \{1, \ldots, n\}$ такое, что $|I| = m$. 
+Обозначим $E = \{x \colon \forall i\in I\, x_i = 0\}$. Тогда легко видеть, что $E^{\bot} 
+= \{x \colon \forall i \not\in I\, x_i = 0\}$. Прямая сумма $E$ и $E^{\bot}$ дает всё $\{0,1\}^n$.
+
+Тогда можем записать утверждение леммы
+$$\sum\limits_{u \in E^{\bot}} W_f^2 (u) = |E^{\bot}| \sum\limits_{a \in E^{\bot}} W_{h_a}^2 (0)$$
+
+Левая часть равна нулю тогда и только тогда, когда для всех $u \in E^{\bot}$ верно $W_f(u) = 0$,
+вторая часть равна нулю тогда и только тогда, когда для всех $a \in E^{\bot}$ верно $W_{h_a} (0) = 0$,
+что, в свою очередь, равносильно уравновешенности $h_a$. Здесь $h_a$ --- cужение на сдвинутое подпространство 
+$a + E$, то есть сужение из определения устойчивости.
+
+Так как эта равносильность выполнена для любых $I$, теорема доказана.
+
+\end{proof}
+
+\section{Бент-Функции}
+\subsection{Определение и базовые свойства}
+\begin{definition}
+Функция $f \in \mathscr{F}_n$ называется \emph{максимально нелинейной} если
+$f = \argmax\limits_{f \in \mathscr{F}_n} \mathcal{N}_f$
+\end{definition}
+
+\begin{definition}
+Функция $f \in \mathscr{F}_n$ называется бент-функцией, если 
+$$\forall u \in \tw^n \colon W_f(u) \in \{2^{n \over 2}, - 2^{n \over 2}\}$$
+\end{definition}
+
+\begin{remark}
+Бент-функции существуют только для четных $n$, поскольку $W_f(u) \in \mathbb{Z}$
+\end{remark}
+
+\begin{remark}
+Если $n$ четно, то $f \text{ бент-функция } \iff f \text{ максимально нелинейна}$. 
+\end{remark}
+
+\begin{proof}
+Вспомним, что $\mathcal{N}_f = 2^{n-1} - {1 \over 2}\max\limits_{u \in \tw^n} |W_f(u)|$.
+Кроме того, по неравенству Парсеваля $$\sum\limits_{x \in \tw^n} W_f^2(x) = 2^{2n}.$$
+Тогда
+$$\sum\limits_{x \in \tw^n} W_f^2(x) \le 2^n \max\limits_{x \in \tw^n} W_f^2(x)
+\implies \max\limits_{x \in \tw^n} W_f^2(x) \ge 2^n \implies
+ \mathcal{N}_f \le 2^{n-1} - {1 \over 2} 2^{n \over 2}$$
+Тогда на бент-функциях достигается максимум нелинейности, а это и требовалось показать.
+\end{proof}ок
+
+\begin{theorem}
+\label{bent_hadamard}
+$f \in \mathscr{F}_{2n}$ является максимально нелинейной тогда и только тогда,
+когда $Q = \left\{{1\over 2^{n}} W_f(\alpha \oplus \beta)\right\}_{\alpha, \beta \in \tw^{2n}}$
+является матрицей Адамара.
+\end{theorem}
+
+\begin{proof}
+Все элементы матрицы принадлежат $\{1,-1\}$, осталось проверить ортогональность строк:
+$$\left\langle Q_{\alpha}, Q_{\beta} \right\rangle  = \sum\limits_{x \in \tw^{2n}} 
+{1 \over 2^{2n}} W_f(x \oplus \alpha) W_f(x \oplus \beta) = {1 \over 2^{2n}} 
+\sum\limits_{x' \in \tw^{2n}} W_f(x')  W_f(x' \oplus \alpha \oplus \beta)$$ 
+теперь по свойству ортогональности коэффициентов Уолша-Адамара имеем
+$$\left\langle Q_{\alpha}, Q_{\beta} \right\rangle = \begin{cases} 
+                       0 & \text{ если } \alpha \neq \beta \\
+                       2^{2n} & \text{ иначе }
+                      \end{cases}$$
+Тогда $Q$ "--- матрица Адамара.
+
+В обратную сторону аналогично.
+\end{proof}
+
+\subsection{Дуальная функция}
+\begin{definition}
+Пусть $f \in \mathscr{F}_{2n}$ "--- максимально нелинейная булева функция. 
+Тогда $\widetilde{f} \in \mathscr{F}_{2n}$ называется \emph{ дуальной к $f$},
+если $W_f(\alpha) = 2^n (-1)^{\widetilde{f}(\alpha)}$
+\end{definition}
+
+\begin{example} Имея пример максимально-нелинейной функции легко построить
+дуальную к ней:
+\begin{center}
+\begin{tabular}{c|c|c|c|c|c}
+
+$x$ & $f$ & $\exp f$ & & $W_f$ & $\widetilde{f}$ \\
+\hline
+00 & 1 & -1 & 0 & 2 & 0 \\
+01 & 0 & 1 & 2 & -2 & 1 \\
+10 & 0 & 1 & -2 & -2 & 1 \\
+11 & 0 & 1 & 0 & -2 & 1 
+
+\end{tabular}
+\end{center}
+\end{example}
+
+\begin{theorem}
+Пусть $f \in \mathscr{F}_{2n}$ является бент-функцией, то $\widetilde{f}$ 
+тоже является бент-функцией.
+\end{theorem}
+
+\begin{proof}
+Воспользуемся формулой обращения преобразования Уолша-Адамара (\ref{walsh_reverse}):
+$$\exp f(x) = 
+  {1 \over 2^{2n}} \sum\limits_{u \in \tw^{2n}} W_f(u) \exp \langle x, u\rangle$$
+ 
+Рассмотрим преобразование Уолша-Адамара для $\widetilde{f}$:
+$$W_{\widetilde{f}} (u) = \sum\limits_{x \in \tw^{2n}} 
+\exp (\widetilde{f}(x) \oplus \langle x, u\rangle)$$
+
+По определению дуальной функции $\exp \widetilde{f} (x) = {1 \over 2^n} W_f(x)$,
+тогда, подставляя в предыдущую формулу:
+$$W_{\widetilde{f}} (u) = {1 \over 2^n} \sum\limits_{x \in \tw^{2n}} 
+W_f (x) \exp (\langle x, u\rangle) = 2^n \exp f(x) \in \{2^n, -2^n\}$$
+А это и значит, что $\widetilde{f}$ является бент-функцией.
+\end{proof}
+
+\begin{remark}
+$\widetilde{\widetilde{f}} = f$. Следует из теоремы об обращении преобразования 
+Уолша-Адамара.
+\end{remark}
+
+\subsection{Критерий Ротхауза}
+
+\begin{theorem}[критерий Ротхауза]
+\label{rothaus}
+$f \in \mathscr{F}_{2n}$ является бент-функцией тогла и только тогда,
+когда $$\forall u \in \tw^{2n} \setminus \{0\} \colon D_u f \text{ уравновешенна}$$.
+\end{theorem}
+
+\begin{proof}
+Вспомним теорему \ref{bent_hadamard} о связи бент-функции с матрицей Адамара.
+Мы поняли, что $$\left\{ {1 \over 2^n} W_f (a \oplus b) \right\}_{a,b \in \tw^{2n}}$$
+является матрицей Адамара. Запишем это условие для функции $\widetilde{f}$,
+учитывая
+$$W_{\widetilde{f}} (u) = 2^n \exp f(u).$$
+Скалярное произведение двух строк матрицы 
+$Q = \left\{ {1 \over 2^n} W_{\widetilde{f}} (a \oplus b) \right\}_{a,b \in \tw^{2n}}$:
+$$\left\langle Q_{\mathbf{0}}, Q_{\alpha} \right\rangle =
+\sum\limits_{x \in \tw^{2n}} {1 \over 2^{2n}} W_{\widetilde{f}} (x)
+ W_{\widetilde{f}} (x \oplus \alpha) =
+ \sum\limits_{x \in \tw^{2n}} \exp (f(x) \oplus f(x \oplus \alpha))
+ = \sum\limits_{x \in \tw^{2n}} \exp D_{\alpha} f(x)$$
+ Тогда $\alpha = 0 \iff D_{\alpha} f \text { уравновешенна}$. Мы записываем
+ только произведения с первой строкой, поскольку $\langle Q_a, Q_b \rangle =
+ \langle Q_0, Q_{a \oplus b} \rangle$
+\end{proof}
+
+%\begin{corollary}
+%$f$ является бент-функцией $\iff$ 
+%$\sum\limits_{u \in \tw^{2n}} \Delta_f (u) =W_f^2(0)$.
+%\end{corollary}
+
+%\begin{proof}
+%По замечанию \ref{autocor_derivative} знаем
+%$$\Delta_f(u) = W_{D_u f} (0).$$
+%Кроме того, $D_u f$ уравновешенна $\iff$ $W_{D_u f} (0) = 0$ по утверждению
+%\ref{eqweight_WH}. 
+
+%$\Rightarrow:$ $\sum\limits_{u \in \tw^{2n}} \Delta_f (u)
+       %= \sum\limits_{u \in \tw^{2n}} \sum\limits_{v \in \tw^{2n}} \exp(D_u f(v))
+       %= 2^{2n}$. Последнее равенство верно, по теореме, так как
+       %$u \neq 0 \implies D_u f$ уравновешенна и тогда соответствующая
+       %сумма по $v$ равна нулю. $D_0 f (x) = 0$ для всех $x$ и отсюда
+       %при $u=0$ соответствующая сумма равна $2^{2n}$. 
+       
+       %С другой стороны, $W_f^2 (0) = |W_f(0)|^2 = 2^{2n}$.
+       
+%$\Leftarrow:$ 
+%\end{proof}
+
+\subsection{Конструкция Мэйорана "--- Мак-Фарланда}
+
+\begin{theorem}
+Пусть $\pi: \tw^n \to \tw^n$ "--- перестановка (биекция). $\psi \in\mathscr{F}_n$.
+
+Тогда 
+$$f \in \mathscr{F}_2n:\, f(x,y) = \langle \pi(y), x \rangle \oplus \psi(y)$$
+является бент-функцией.
+\end{theorem}
+
+\begin{proof}
+Воспользуемся критерием Ротхауза (\ref{rothaus}) об уравновешенности производных.
+$$D_u f(x,y) = f(x \oplus u_1, y \oplus u_2) \oplus f(x,y) =
+   \langle \pi(y + u_2), x + u_1\rangle \oplus \psi(x \oplus u_2)
+   \oplus \langle \pi(y), x \rangle \oplus \psi(y)$$
+Чтобы доказать уравновешенность, достаточно вычислить нулевой коэффициент
+Уолша-Адамара для $D_u f(x,y)$:
+$$W_{D_u f} (0) = \sum\limits_{v_1, v_2 \in \tw^{n}} 
+   \exp ( \langle \pi(v_2 + u_2), v_1 + u_1\rangle \oplus \psi(v_2 \oplus u_2)
+   \oplus \langle \pi(v_2), v_1 \rangle \oplus \psi(v_2))$$
+Распишем по линейности скалярного произведения и вынесем за
+скобки всё, зависящее только от $v_2$:
+$$\ldots = \sum\limits_{v_2 \in \tw^n} 
+\exp (\langle \pi(v_2 \oplus u_2), u_1 \rangle \oplus \psi(v_2)\oplus \psi(v_2\oplus u_2))
+\sum\limits_{v_1 \in \tw^n} 
+\exp (\langle \pi(v_2 \oplus u_2) \oplus \pi(v_2), v_1 \rangle ) $$
+Из свойств функции Уолша знаем, что
+$$\sum\limits_{v_1 \in \tw^n} 
+\exp (\langle \pi(v_2 \oplus u_2) \oplus \pi(v_2), v_1 \rangle ) =
+\begin{cases} 0 & \text{ если } \pi(v_2 \oplus u_2) \oplus \pi(v_2) \neq 0 \iff u_2 \neq 0 \\
+              2^n & \text{ иначе }\end{cases}$$
+Тогда можем переписать сумму как
+$$\ldots = 2^n \cdot 
+             \begin{cases} 0 & \text{ если } u_2 \neq 0 \\
+                         \sum\limits_{v_2 \in \tw^n} 
+\exp (\langle \pi(v_2), u_1 \rangle \oplus \underbrace{\psi(v_2)\oplus \psi(v_2)}_{=0})
+   & \text{ если } u_2 = 0 \end{cases}$$
+Тогда, из тех же соображений, можем записать
+$$W_{D_u f} (0) = \begin{cases} 0 & u \neq 0 \\ 2^{2n} & u = 0\end{cases}$$
+Это доказывает условие критерия Ротхауза и завершает доказательство теоремы.
+\end{proof}
+
+\begin{definition}
+Класс функций, построенных по теореме выше, называется классом
+Мэйорана "--- Мак-Фарланда и обозначается $\mathcal{M}$.
+\end{definition}
+
+\begin{proposition}
+$|\mathcal{M}| = (2^n)! \cdot 2^{2^n}$
+\end{proposition}
+\begin{proof}
+Любая функция из $\mathcal{M}$ однозначно задается поответствующими $\pi$
+и $\psi$. Пусть существует $\pi_1, \pi_2$ и $\psi_1, \psi_2$, такие, что
+$$\langle \pi_1(y), x \rangle \oplus \psi_1(y) \equiv
+ \langle \pi_2(y), x \rangle \oplus \psi_2(y)$$
+ тогда
+ $$\langle \pi_1(y) \oplus \pi_2(y), x \rangle \equiv \psi_1(y) \oplus \psi_2(y)$$
+ Но левая часть зависит от $x$, а правая не зависит, положив $x=0$ получаем
+ $\psi_1 \equiv \psi_2$ и тогда сразу $\pi_1 \equiv \pi_2$.
+\end{proof}
+
+\begin{proposition}
+Пусть $f(x,y) = \langle \pi(y), x \rangle \oplus \psi(y)$. Тогда
+$$\widetilde{f}(x,y) = \langle y, \pi^{-1} (x) \rangle \oplus \psi(\pi^{-1}(x))$$
+для $x,y \in \tw^n$
+\end{proposition}
+
+\begin{proof}
+Нужно проверить $W_f(\alpha) = 2^n (-1)^{\widetilde{f}(\alpha)}$:
+$$W_f(\alpha_1, \alpha_2) = \sum\limits_{x,y \in \tw^n} 
+\exp (\langle \pi(y), x \rangle \oplus \psi(y) \oplus 
+   \langle \alpha_1, x \rangle \oplus \langle \alpha_2, y \rangle) = 
+   \sum\limits_{y \in \tw^n} \exp (\psi(y) \oplus \langle \alpha_2, y \rangle)
+   \sum\limits_{x \in \tw^n} \exp (\langle \pi(y) \oplus \alpha_1, x \rangle)$$
+По свойству функции Уолша
+$$  \sum\limits_{x \in \tw^n} \exp (\langle \pi(y) \oplus \alpha_1, x \rangle) =
+\begin{cases} 2^n & \pi(y) = \alpha_1 \\ 0 & \text{иначе}\end{cases}$$
+Тогда в итоге получаем
+$$W_f(\alpha) = 2^n \exp(\langle \alpha_2, \pi^{-1} (\alpha_1)\rangle
+          \oplus \psi(\pi^{-1}(\alpha_1))) = 2^n \exp (\widetilde{f}(\alpha))$$
+\end{proof}
+
+\begin{proposition}
+На множестве $\mathscr{F}_{2n}$ существуют бент-функции степеней $2, 3, \ldots, n$.
+\end{proposition}
+
+\begin{proof}
+Рассмортим $f(x,y) = \langle \pi(y), x \rangle \oplus \psi(y)$.
+
+Второе слагаемое зависит только от $y$. Пусть $\forall y \colon \pi(y)=y$.
+Тогда 
+$$f(x,y) = x_1 y_1 \oplus \ldots \oplus x_n y_n \oplus \psi(y)$$
+$deg(\psi) \in \{0, \ldots, n\}$, кроме того, он не содержит мономов
+$x_i y_i$, то есть, коэффициенты при них в $f$ равны $1$. 
+Тогда $deg f \in \{2, \ldots, n\}$.
+\end{proof}
+
+\subsection{Частично бент-функции}
+\begin{definition}
+Обозначим $N \Delta_f = |\supp \Delta_f| = |\{u \in \tw^n \colon \Delta_f (u) \neq 0 \}|$\\
+$N W_f = |\supp W_f| = |\{u \in \tw^n \colon W_f (u) \neq 0 \}|$
+\end{definition}
+\begin{proposition}
+$\forall f \in \mathscr{F}_n \colon N \Delta_f \cdot N W_f \ge 2^n$
+\end{proposition}
+
+\begin{definition}
+Назовём функцию $f \in \mathscr{F}_n$ частично бент-функцией, если 
+$N \Delta_f \cdot N W_f = 2^n$
+\end{definition}
+
+\begin{theorem}
+Следующие условия равносильны
+\begin{enumerate}
+\item $f$ "--- частично бент-функция
+\item $\exists t \in \tw^n$ такое, что $\forall u \in \tw^n \colon
+    \Delta_f (u) \in \{0, (-1)^{\langle t,u \rangle} 2^n\}$
+\item $\tw^n = E \oplus E'$ "--- ортогональная прямая сумма. 
+$f(x+y) = g(x) + h(y)$, $x \in E,\, y\in E'$ при этом 
+ $g$ --- афинная функция, а $h$ --- бент-функция (тогда $dim E'$ четно)
+\end{enumerate}
+\end{theorem}
+
+\section{Неравенство Зигенталера}
+
+\begin{definition}
+Функция $f: \{0,1\}^n \to \{0,1\}$ называется $m$-устойчивой, если 
+для любых $1 \le i_1 < \ldots < i_m \le n$ и любых $a_1, \ldots, a_m 
+\in \{0,1\}$ функция, полученная из $f$ сужением на множество 
+$\{x \colon x_{i_k} = a_k\}$ уравновешенна. 
+
+Произвольную функцию из $\mathscr{F}_n$ назовем $(-1)$-устойчивой.
+\end{definition}
+
+\begin{definition}
+Пусть $f: \{0,1\}^n \to \{0,1\}$. $f$ называется корелляционно-имунной
+порядка $m$, если
+ для любых $1 \le i_1 < \ldots < i_m \le n$, $a_1, \ldots, a_m \in \{0,1\}$
+ выполнено
+ $$w(f_{i_1, \ldots, i_m}^{a_i \ldots, a_m}) = {w(f) \over 2^m}$$
+\end{definition}
+
+\begin{proposition}
+Верны следующие утверждения:
+\begin{enumerate}
+\item $f$ корреляционно имунна порядка $m$ $\iff$ $\forall u \in \tw^n 
+\colon wt(u) \in \{1, \ldots, m\} \implies W_f(u)=0$
+\item $f$ $m$-устойчива $\iff$ $\forall u \in \tw^n \colon
+  wt(u) \in \{0, \ldots, m\} W_f(u)=0$
+\end{enumerate}
+\end{proposition}
+
+\begin{definition}
+Обозначим $\cor m = \max \{m \colon f \text{ корреляционно-имунна порядка } m\}$\\
+$\sut f = \begin{cases} \cor f & \text{ если } f \text{ уравновешенна} \\
+                         -1 & \text{ иначе}\end{cases}$
+\end{definition}
+
+\begin{remark}
+Пусть $f \in \mathscr{F}_n$. Тогда $deg f = n \iff wt(f) \text{ нечетен}$
+\end{remark}
+
+\begin{proof}
+$g(u) = \bigoplus\limits_{\substack{x \le u \\ x \in \tw^n}} f(x)$\\
+Заметим, что $wt(f) \mod 2 = g(\mathbf{1})$. Заметим, что 
+$g(\mathbf{1}) = 1 \iff deg f = n$.
+\end{proof}
+
+\begin{theorem}[неравенство Зигенталера]
+$\forall f \in \mathscr{F}_n \colon deg f + \cor f \le n$ и 
+$0 \le \sut f \le n-2 \implies deg f + \sut f \le n-1$
+\end{theorem}
+
+\begin{proof}
+Пусть $deg f = d$. Не умаляя общности, $f$ содержит моном $x_1, \ldots, x_d$,
+иначе переобозначим переменные. Рассмотрим $f': \tw^{d} \to \tw$, $f'(x) = f(x, 0)$.
+По замечанию $wt(f') \mod 2 = 1$ Пусть $f'_0(x) = f'(0,x)$, $f'_1(x) = f(1,x)$
+"--- функции из $\tw^{d-1}$ в $\tw$. 
+
+Легко видеть, что $wt(f') = wt(f'_0) + wt(f'_1)$, тогда $wt(f'_0) \neq wt(f'_1)$,
+так как $wt(f')$ нечетно. Тогда $\cor f < n-d+1 \implies d + \cor f \le n$.
+
+Теперь докажем вторую часть теоремы. $wt(f) = 2^{n-1}$ тогда, 
+если мы зафиксируем $m = \sut f$ переменных, то полученная функция $f'$ 
+будет иметь вес $2^{n-1-m}$ и, при наших условиях, это четное число.
+Пусть $deg f \ge n-m$ тогда найдется такое сужение, что вес $f'$ 
+нечетен, тогда получаем противоречие. Получили $deg f + \sut f \le n-1$.
+\end{proof}
+
+\begin{remark}
+По критерию $m$-устойчивости ($W_f (u) = 0$ для всех $u$, таких, что
+$0 \le wt(u) \le n$) видно, что $\sut f \le n-1$.
+
+$\sut f = n-1 \implies deg f \le 1 \implies f \text{ афинная }$.
+\end{remark}
+
+\begin{definition}
+Если функция $f$ $m$-устойчива ($0 \le m \le n-2$) и $deg f = n-1-m$,
+то $f$ называется $m$-оптимальной.
+\end{definition}
+
+\section{Булевы функции и линейные коды}
+
+Установим взаимно-однозначное соответствие между $\mathscr{F}_n$
+и двоичными кодами на пространстве $\tw^n$:
+$$f \in \mathscr{F}_n \iff \supp f \subset \tw^n$$
+
+\begin{definition}
+Для $C \subset \tw^n$ \emph{весовой спектр} "--- это последовательность
+$A_0, \ldots, A_n$, где $$A_i = |\{x \in C \colon w(x) = i\}|$$
+\end{definition}
+
+\begin{definition}
+\emph{Спектр расстояний} кода $C \subset \tw^n$ есть последовательность
+$B_0, \ldots, B_n$, где
+$$B_i = {1 \over |C|} \left|\left\{ (u,v) \colon u,v \in C \land dist(u,v) = i\right\}\right|$$
+\end{definition}
+
+\begin{remark}
+Верны следующие утвержедения:
+\begin{enumerate}
+\item $\sum\limits_{i=0}^n A_i = \sum\limits_{i=0}^n B_i = |C|$
+\item $B_0 = 1$
+\item $C$ линеен $\implies$ $\forall i \in \{1,\ldots, n\} \colon A_i = B_i$
+\end{enumerate}
+\end{remark}
+
+\begin{definition}
+Пусть $C \subset \tw^n$ "--- линейный код. Тогда \emph{дуальным кодовым
+расстоянием} кода $C$ наывается $d'(C) = d(C^{\bot})$.
+\end{definition}
+
+\begin{definition}
+Многочлен $W_C (x,y) = \sum\limits_{i=0}^n A_i x^{n-i} y^i$, где $\{A_i\}$ 
+"--- весовой спектр кода $C$ называется \emph{весовой функцией} или 
+\emph{энумератором} кода $C$.
+\end{definition}
+
+\begin{theorem}[Мак-Вильямс]
+\label{mac-williams1}
+$W_{C^{\bot}} (x,y) = {1 \over |C|} W_C (x+y, x-y)$
+\end{theorem}
+\begin{proof}
+Без доказательства
+\end{proof}
+
+\begin{example}
+$C = \{000,011,101,110\}$\\
+$A = (1, 0, 3, 0)$\\
+$W_C (x,y) = x^3 + 3 x y^2$\\
+$C^{\bot} = \{000,111\}$\\
+$A' = (1,0,0,1)$\\
+$W_{C^{\bot}} (x,y) = x^3 + y^3$\\
+По теореме \ref{mac-williams1} 
+$W_{C^{\bot}} (x,y) = {1 \over 4} \left((x+y)^3 + 3 (x+y) (x-y)^2\right)
+= {1\over 4} \left(x^3 + 3x^2 y + 3x y^2 + y^3 + 3(x^3 - x^2 y - y^2 x + y^3)\right) =
+x^3 + y^3$
+\end{example}
+
+\begin{remark}
+Чтобы для линейного кода $C$ вычислить $d'(C)$ можно вычислить $W_{C^{\bot}}$ 
+по теореме Мак-Вильямс и найти минимальное такое $k$, что $A'_k \neq 0$.
+\end{remark}
+
+\begin{corollary}
+Можно переформулировать теорему Мак-Вильямс следующим образом:
+$$A'_k = {1 \over |C|} \sum\limits_{i=0}^n A_i P_k(i)$$
+где $P_k(x) = \sum\limits_{i=0}^k (-1)^i C_{x}^i C_{n-x}^{k-j}$
+\end{corollary}
+
+\begin{theorem}[Мак-Вильямс для $\{B_i\}$]
+$B'_n = {1 \over |C|} \sum\limits_{i=0}^n B_i \cdot P_k(i)$
+\end{theorem}
+
+\begin{definition}
+Дуальным расстоянием произвольного кода $C$ называется число $d'(C)$,
+такое, что $\forall k \in \{1, d'(C)-1\}$ выполняется $B'_k = 0$
+и $B'_{d'(C)} \neq 0$.
+\end{definition}
+
+\section{Афинная эквивалентность булевых функций}
+
+\begin{definition}
+Функции $g$ и $h \in \mathscr{F}_n$ называются афинно-эквивалентными, если существуют
+\begin{itemize}
+\item Невырожденная матрица $L$ размера $n \times n$ над $\mathbb{F}_2$
+\item $b,c \in \tw^n$
+\item $\lambda \in \mathbb{F}_2$
+\end{itemize}
+такие, что $h(x) = g(Lx \oplus b) \oplus \langle c,x \rangle \oplus \lambda$
+\end{definition}
+
+\begin{remark}
+Пусть $g \in \mathscr{F}_n$, $L$ "--- невырожденная матрица размера $n \times n$,
+$h(u) = g(Lu)$, тогда $$W_h(u) = W_g((L^{-1})^{T})$$
+\end{remark}
+
+\begin{proof}
+\[
+W_h(u) = \sum\limits_{x \in \tw^n} (-1)^{\langle u,x \rangle \oplus h(x)}
+\] 
+сделаем замену $y = Lx$ (тогда $x = L^{-1} y$
+\[
+\sum\limits_{y \in \tw^n} (-1)^{\overbrace{\langle u, L^{-1} y \rangle}^
+                                 {\langle u L^{-1}, y \rangle} \oplus g(y)} =
+                                 W_g(u L^{-1})
+\]
+Если обозначить $L' = (L^{-1})^{T}$, то $W_h(u) = W_g(L'u)$.
+\end{proof}
+
+\begin{corollary}
+Если $h(x) = g(Lx \oplus b) \oplus \langle c,x \rangle \oplus \lambda$,
+то $W_h(u) = (-1)^{\langle b, L'(u \oplus c)\rangle \oplus \lambda} W_g(L'(u\oplus c))$,
+то есть спектр Уолша-Адамара для $h$ является спектром Уолша-Адамара для
+$g$ с измененным порядком и знаками.
+\end{corollary}
+
+\begin{corollary}
+Бентность сохраняется при афинной эквивалентности.
+\end{corollary}
+
+\begin{theorem}[о сдвиге бент-функций]
+Не существует такой неафинной функции $f$, прибавление которой сохраняет
+бентность {\bfseries всех} бент-фукций.
+\end{theorem}

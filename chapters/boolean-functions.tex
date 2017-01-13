@@ -313,7 +313,7 @@ $$H (z'')^T = (2, -2, 2, -2, 2, -2, 2, -2, -6, 6, 2, -2, 2, -2, 2, -2)^T$$
 
 
 \section{Преобразование Фурье и Уолша-Адамара для булевых функций}
-
+\subsection{Функция Уолша}
 \begin{definition}
 \emph{Экспонента }булевой функции$\exp f\left(x\right)=\left(-1\right)^{f\left(x\right)}$
 \end{definition}
@@ -386,7 +386,7 @@ $E_{1}$. Значит, $E_{0}+y\subset E_{1}\Rightarrow\left|E_{0}\right|\leq\le
 \]
 \end{corollary}
 
-
+\subsection{Преобразование Фурье и Уолша-Адамара}
 \begin{definition}
 \emph{Преобразованием Фурье} булевой функции $f$ называется целочисленная
 функция на $\tw^n$, определяемая следующим равенством
@@ -476,6 +476,7 @@ W_{f}\left(u\right)=\delta_{0}\left(u\right)2^{n}-2\sum_{x\in\supp f}v\left(x,u\
 \]
 \end{proof}
 \begin{theorem}[формула обращения]
+\label{walsh_reverse}
 Для преобразования Уолша-Адамара справедлива формула обращения.
 \[
 \exp f\left(x\right)=2^{-n}\sum_{u\in \tw^n}W_{f}\left(u\right)v\left(x,u\right)
@@ -522,6 +523,8 @@ W_{f}\left(u\right)=\delta_{0}\left(u\right)2^{n}-2\sum_{x\in\supp f}v\left(x,u\
 =2^{2n}
 \]
 \end{proof}
+
+\subsection{Связь АНФ и коэффициентов Уолша-Адамара}
 \begin{proposition}
 Коэффициенты алгебраический нормальной формы $g_{f}\left(u\right)$
 выражаются через коэффициенты Уолша-Адамара следующим образом:
@@ -552,7 +555,7 @@ g_f(u) = 2^{wt(u) - 1} - 2^{wt(u) - n - 1}
    \]
 \end{proof}
 
-\section{Быстрое вычисление коэффициентов Уолша-Адамара}
+\subsection{Быстрое вычисление коэффициентов Уолша-Адамара}
 
 Коэффициенты Уолша-Адамара "--- это коэффициенты Фурье для функции
 $\exp f$, поэтому достаточно научиться вычислять коэффициенты Фурье.
@@ -568,6 +571,28 @@ $$F_f(u) = F_{f_0} (u') + \exp{u_1} F_{f_1} (u')$$
 $\in \tw^{2^n}$ к задаче вычисления преобразования Фурье для двух 
 векторов из $\tw^{2^{n-1}}$. Аналогично вычислению преобразования
 Мёбиуса, имеем время работы $T(n) = 2^n + 2T(n-1) = 2^n \cdot n$
+
+\subsection{Свёртка и преобразование Фурье}
+\begin{definition}
+Пусть $f,g \in \mathscr{F}_n$ определим свёртку $f$ и $g$ следующим образом:
+$$(f * g) (x) = \sum\limits_{y \in \tw^n} f(x \oplus y) g(y) = 
+   \sum\limits_{y \in \tw^n} f(y) g(x \oplus y)$$
+\end{definition}
+
+\begin{theorem}
+\label{fourier_convolution}
+Для любых $f,g \in \mathscr{F}_n$ выполняется
+$$\forall u \in \tw^n \colon F_{f * g} (u) = F_f (u) F_g (u)$$
+\end{theorem}
+
+\begin{proof}
+$$F_{f*g}(u) = \sum\limits_{x \in \tw^n} (f * g) (x) \exp (\langle x,u \rangle)
+= \sum\limits_{x \in \tw^n} \sum\limits_{y \in \tw^n} f(y)  g(x \oplus y)
+  \exp(\langle x\oplus y \oplus y,u \rangle) = $$
+  $$\sum\limits_{y \in \tw^n} f(y) \exp(\langle y, u\rangle) 
+  \sum\limits_{x \in \tw^n} g(x \oplus y) \exp(\langle x\oplus y, u\rangle)
+  = F_{f} (u) F_{g} (u)$$
+\end{proof}
 
 \section{Производная булевой функции по направлению}
 
